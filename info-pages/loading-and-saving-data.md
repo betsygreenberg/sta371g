@@ -5,11 +5,11 @@
 There are two ways to load files. The easiest is to load it directly from GitHub:
 
 1.  [Go to the GitHub web site for our course](https://github.com/brianlukoff/sta371g)
-2.  Click the **data** folder, and then click on a data set (we'll use `stock-market-returns.csv` as an example).
+2.  Click the **data** folder, and then click on a data set (we'll use `stock_market_returns.csv` as an example).
 3.  GitHub by default will show you the data in their viewer, but we need the link directly to the file itself, so click on **Raw** on the right.
 4.  Copy the URL to the clipboard and then paste into an R command in the following format:
 
-    	stock_market_returns <- read.csv("https://raw.githubusercontent.com/brianlukoff/sta371g/master/data/stock-market-returns.csv")
+    	stock_market_returns <- read.csv("https://raw.githubusercontent.com/brianlukoff/sta371g/master/data/stock_market_returns.csv")
 
 5.  Once you run this command, the data will be loaded into the data frame you specified in R (whatever you put to the left of the arrow; in this case, `stock_market_returns`).
 
