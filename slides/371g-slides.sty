@@ -1,0 +1,33 @@
+\usepackage[utf8]{inputenc}
+\usepackage{pgfpages}
+\usepackage[main=english]{babel}
+\usepackage{ragged2e}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{calc,shapes,backgrounds,arrows}
+\usepackage{amsmath,amssymb}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{pdfcomment}
+\usetheme[faculty=ped,logo=../mccombs.png]{fibeamer}
+\usetikzlibrary{shapes.geometric}
+
+\renewcommand{\note}[1]{\marginnote{\pdfcomment[icon=note]{#1}}}
+
+\newcommand{\fullpagepicture}[1]{
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[at=(current page.center)] {
+      \includegraphics[width=\paperwidth]{#1}
+    };
+  \end{tikzpicture}
+}
+\tikzset{
+  decision/.style = {regular polygon, regular polygon sides=4, draw},
+  leaf/.style     = {color=orange},
+  prob/.style     = {circle,draw}
+}
+
+\newcommand{\lc}{\note{>>> LC question after this slide <<<}}
+
+\newcommand{\greencheckmark}{{\Large\color{green}\checkmark}}
