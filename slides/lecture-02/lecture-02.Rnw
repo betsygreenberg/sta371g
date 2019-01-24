@@ -1,0 +1,249 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+% Uncomment these lines to print notes pages
+% \pgfpagesuselayout{4 on 1}[letterpaper,border shrink=5mm,landscape]
+% \setbeameroption{show only notes}
+\title{Simple regression}
+\subtitle{Lecture 2}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, tidy=F, prompt=T)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  @
+  <<include=F>>=
+  load("../../data/addhealth_public4.rdata")
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}
+      \begin{center}
+        \includegraphics[width=3in]{add-health}
+
+        \bigskip
+        National Longitudinal Study of Adolescent to Adult Health
+
+        \bigskip
+        Nationally representative sample of US students in grades 7-12 were surveyed in the 1994-95 school year (\url{http://www.cpc.unc.edu/projects/addhealth})
+
+        \bigskip
+        Students were followed up on with subsequent in-home interviews four times (most recently 2008)
+      \end{center}
+    \end{frame}
+
+    \begin{frame}
+      This is an \textbf{awesome} data set, with data on:
+      \begin{columns}[onlytextwidth]
+        \column{.5\textwidth}
+          \begin{itemize}
+            \item family
+            \item relationships
+            \item health
+            \item military service
+            \item religion
+            \item sex and STDs
+            \item economics
+            \item education
+          \end{itemize}
+        \column{.5\textwidth}
+          \begin{itemize}
+            \item personality
+            \item criminality
+            \item tobacco
+            \item drugs
+            \item alcohol
+            \item pregnancy
+            \item sleep
+            \item daily activities
+          \end{itemize}
+      \end{columns}
+    \end{frame}
+
+    \begin{frame}
+      \begin{center}
+        Do people that start drinking younger tend to drink more (or less) when they become adults?
+      \end{center}
+      \bigskip\pause
+      We want to know:
+      \begin{itemize}[<+->]
+        \item What is our best \textbf{prediction} of alcohol consumption if we know at what age had their first drink?
+        \item How good is that prediction?
+        \item What is the \textbf{relationship} between alcohol consumption and age of first drink?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+      \begin{tabular}{ll}
+        Age of first drink & \textbf{Predictor variable} \\
+        Number of drinks consumed as adult & \textbf{Response variable} \\
+      \end{tabular}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \note{
+        Point out R command and syntax. \textCR
+        Ask what's wrong with this? \textCR
+        Introduce the idea of a codebook here.
+      }
+      <<fig.height=2.5>>=
+      hist(addhealth_public4$h4to34,
+        main='', xlab='Age of first drink',
+        col='orange')
+      @
+      \lc
+    \end{frame}
+
+    \begin{frame}{Let's examine our variables}
+      \begin{center}
+        \includegraphics[width=3.5in]{h4to34_codebook.png}
+      \end{center}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<>>=
+      age <- addhealth_public4$h4to34
+      age[age >= 96] <- NA
+      hist(age, main='', xlab='', col='orange')
+      @
+    \end{frame}
+
+    \begin{frame}{Let's examine our variables}
+      \begin{center}
+        \includegraphics[width=3.5in]{h4to36_codebook.png}
+      \end{center}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<>>=
+      num.drinks <- addhealth_public4$h4to36
+      num.drinks[num.drinks >= 96] <- NA
+      hist(num.drinks, main='', xlab='How many drinks',
+        col='orange')
+      @
+    \end{frame}
+
+
+    \begin{frame}[fragile]
+      <<>>=
+      plot(num.drinks ~ age, pch=16, col='orange',
+        xlab='Age of first drink',
+        ylab='Number of drinks consumed')
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<>>=
+      plot(jitter(num.drinks, 4) ~ jitter(age, 4),
+        pch=46, col='orange',
+        xlab='Age of first drink',
+        ylab='Number of drinks consumed')
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      The regression line is the line of ``best fit'' through this plot:
+      <<echo=F>>=
+      plot(num.drinks ~ age, pch=16, col='orange',
+        xlab='Age of first drink',
+        ylab='Number of drinks consumed')
+      model <- lm(num.drinks ~ age)
+      abline(model, col='red', lwd=4)
+      @
+      \lc
+    \end{frame}
+
+    \begin{frame}{What is linear regression doing?}
+      We model each case ($x_i=$ age for $i$th person, $y_i=$ number of drinks for $i$th person) as a linear relationship plus some error:
+      \[
+        y_i = \beta_0 + \beta_1 x_i + \epsilon_i
+      \]
+      $\beta_0$ and $\beta_1$ are the intercept and slope, respectively.
+      \bigskip\pause
+
+      We find estimates for $\beta_0$ and $\beta_1$ in our sample that \emph{minimize} the errors:
+      \[
+        \hat Y = \hat\beta_0 + \hat\beta_1 X
+      \]
+      This is the regression (best fit) line.
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsize{9}{9}\selectfont
+      <<>>=
+      model <- lm(num.drinks ~ age)
+      summary(model)
+      @
+      \lc
+    \end{frame}
+
+    \begin{frame}[fragile]
+      This translates to a regression line of:
+      <<echo=F>>=
+        options(digits=2)
+        beta0 <- model$coefficients["(Intercept)"]
+        beta1 <- model$coefficients['age']
+        r.squared <- summary(model)$r.squared
+        age.se <- summary(model)$coefficients[,"Std. Error"]["age"]
+      @
+      \[
+        \widehat{\text{num drinks}} = \Sexpr{beta0} - \Sexpr{abs(beta1)} \cdot\text{age}
+      \]
+      \pause
+      Predict number of drinks for $\text{age}=21$:
+      \[
+        \widehat{\text{num drinks}}
+        = \Sexpr{beta0} - \Sexpr{abs(beta1)} \cdot 21
+        = \Sexpr{predict(model, list(age=21))}
+      \]
+      Or we can use R to do the work for us:
+      <<results='hide'>>=
+      predict(model, list(age=21))
+      @
+      \lc
+    \end{frame}
+
+    \begin{frame}{How good are our predictions?}
+      $R^2$ quantifies how closely the model fits the data.
+      \begin{itemize}[<+->]
+        \item $R^2$ is the fraction of the variation of $Y$ explained by $X$.
+        \item $R^2=\text{cor}(X,Y)^2$, i.e., the squared correlation between $X$ and $Y$.
+        \item $R^2=0$ when the model has no predictive power at all.
+        \item $R^2=1$ when the model yields perfect predictions every time.
+        \item $R^2=\text{cor}(Y,\hat Y)^2$, i.e., the squared correlation between the actual and predicted values of $Y$.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \note{Point out where $R^2$ is found on the R output.}
+      \fontsize{9}{9}\selectfont
+      <<>>=
+      model <- lm(num.drinks ~ age)
+      summary(model)
+      @
+    \end{frame}
+
+    \begin{frame}
+      In our regression, $R^2=\Sexpr{r.squared}$, so $r=\sqrt{\Sexpr{r.squared}}=\Sexpr{sqrt(r.squared)}$.
+
+      Is this ``significant?'' \pause \alert{We'll discuss this next time!}
+    \end{frame}
+  \end{darkframes}
+
+\end{document}
