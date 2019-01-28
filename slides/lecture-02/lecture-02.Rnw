@@ -265,7 +265,7 @@
     \end{frame}
 
     \begin{frame}
-      In our regression, $R^2=\Sexpr{r.squared}$, so $r=\sqrt{\Sexpr{r.squared}}=\Sexpr{sqrt(r.squared)}$.
+      In our regression, $R^2=\Sexpr{r.squared}$, so $r=\sqrt{\Sexpr{r.squared}}=-\Sexpr{sqrt(r.squared)}$ (negative since the slope is negative).
 
       Is this ``significant?'' \pause \alert{We'll discuss this next time!}
     \end{frame}
