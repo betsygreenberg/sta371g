@@ -18,7 +18,7 @@
   par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
   @
   <<include=F>>=
-  load("../../data/addhealth_public4.rdata")
+  addhealth <- read.csv("../../data/addhealth.csv")
   @
 
   \frame{\maketitle}
@@ -33,6 +33,31 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
+    \begin{frame}{About the course staff}
+      \begin{itemize}
+        \item Instructor: \textbf{Brian Lukoff, Ph.D.}
+          \begin{itemize}
+            \item Office hours: M/W 11 AM-12 PM in CBA 3.440
+            \item Contact: \texttt{brian.lukoff@utexas.edu} or 415-652-8853
+          \end{itemize}
+        \item TAs:
+          \begin{itemize}
+            \item Office hours: M 11:30 AM-1:30 PM, 2-4 PM, W 12-2 PM, Th 4-6 PM in CBA 4.304
+            \item Help session: T 6-7 PM in the ModLab
+          \end{itemize}
+
+          \vspace{0.2in}
+          \begin{center}
+            \begin{tabular}{ccc}
+              \includegraphics[width=1.1in]{vasko} &
+              \includegraphics[width=1.1in]{nicole} &
+              \includegraphics[width=1.1in]{zameer} \\
+              Vasko Lalkov & Nicole Chia & Zameer Vaswani \\
+            \end{tabular}
+          \end{center}
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}
       \begin{center}
         \includegraphics[width=3in]{add-health}
@@ -103,7 +128,7 @@
         Introduce the idea of a codebook here.
       }
       <<fig.height=2.5>>=
-      hist(addhealth_public4$h4to34,
+      hist(addhealth$h4to34,
         main='', xlab='Age of first drink',
         col='orange')
       @
@@ -118,7 +143,7 @@
 
     \begin{frame}[fragile]
       <<>>=
-      age <- addhealth_public4$h4to34
+      age <- addhealth$h4to34
       age[age >= 96] <- NA
       hist(age, main='', xlab='', col='orange')
       @
@@ -132,7 +157,7 @@
 
     \begin{frame}[fragile]
       <<>>=
-      num.drinks <- addhealth_public4$h4to36
+      num.drinks <- addhealth$h4to36
       num.drinks[num.drinks >= 96] <- NA
       hist(num.drinks, main='', xlab='How many drinks',
         col='orange')
