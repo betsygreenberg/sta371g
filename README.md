@@ -14,10 +14,13 @@ Short R help pages are available on a variety of topics:
 * [Simulations](info-pages/simulations.md)
 * [Getting more help](info-pages/getting-more-help.md)
 
-# Lecture slides
+# Lecture slides & scripts
 
-* [Lecture 1: Introduction to predictive analytics](slides/lecture-01/lecture-01.pdf)
-* [Lecture 2: Simple regression](slides/lecture-02/lecture-02.pdf)
+* Lecture 1: Introduction to predictive analytics ([slides](slides/lecture-01/lecture-01.pdf))
+* Lecture 2: Simple regression ([slides](slides/lecture-02/lecture-01.pdf) | [script](lecture-scripts/lecture-02.R))
+
+# Lecture scripts
+
 
 # R help sessions
 
