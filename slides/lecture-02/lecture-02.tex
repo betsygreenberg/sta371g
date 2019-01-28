@@ -1,4 +1,54 @@
-\documentclass{beamer}
+\documentclass{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{1, 0.894, 0.769}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.824,0.412,0.118}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{1,0.894,0.71}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.824,0.706,0.549}{#1}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{1,0.894,0.769}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{1,0.894,0.769}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.941,0.902,0.549}{#1}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.804,0.776,0.451}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.78,0.941,0.545}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{1,0.78,0.769}{#1}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 \usepackage{../371g-slides}
 % Uncomment these lines to print notes pages
 % \pgfpagesuselayout{4 on 1}[letterpaper,border shrink=5mm,landscape]
@@ -6,8 +56,10 @@
 \title{Simple regression}
 \subtitle{Lecture 2}
 \author{STA 371G}
-
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
+  
+  
   
 
   \frame{\maketitle}
@@ -119,13 +171,13 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlstd{> }\hlkwd{hist}\hlstd{(addhealth4}\hlopt{$}\hlstd{h4to34,}
+\hlstd{> }\hlkwd{hist}\hlstd{(addhealth}\hlopt{$}\hlstd{h4to34,}
 \hlstd{+ }  \hlkwc{main}\hlstd{=}\hlstr{''}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{'Age of first drink'}\hlstd{,}
 \hlstd{+ }  \hlkwc{col}\hlstd{=}\hlstr{'orange'}\hlstd{)}
 \end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-3-1.tex}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in hist(addhealth4\$h4to34, main = "{}"{}, xlab = "{}Age of first drink"{}, : object 'addhealth4' not found}}\end{kframe}
 \end{knitrout}
       \lc
     \end{frame}
@@ -140,21 +192,13 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlstd{> }\hlstd{age} \hlkwb{<-} \hlstd{addhealth4}\hlopt{$}\hlstd{h4to34}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(expr, envir, enclos): object 'addhealth4' not found}}\begin{alltt}
+\hlstd{> }\hlstd{age} \hlkwb{<-} \hlstd{addhealth}\hlopt{$}\hlstd{h4to34}
 \hlstd{> }\hlstd{age[age} \hlopt{>=} \hlnum{96}\hlstd{]} \hlkwb{<-} \hlnum{NA}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in age[age >= 96] <- NA: object 'age' not found}}\begin{alltt}
 \hlstd{> }\hlkwd{hist}\hlstd{(age,} \hlkwc{main}\hlstd{=}\hlstr{''}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{''}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{'orange'}\hlstd{)}
 \end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-4-1.tex}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in hist(age, main = "{}"{}, xlab = "{}"{}, col = "{}orange"{}): object 'age' not found}}\end{kframe}
 \end{knitrout}
     \end{frame}
 
@@ -168,22 +212,14 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlstd{> }\hlstd{num.drinks} \hlkwb{<-} \hlstd{addhealth4}\hlopt{$}\hlstd{h4to36}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(expr, envir, enclos): object 'addhealth4' not found}}\begin{alltt}
+\hlstd{> }\hlstd{num.drinks} \hlkwb{<-} \hlstd{addhealth}\hlopt{$}\hlstd{h4to36}
 \hlstd{> }\hlstd{num.drinks[num.drinks} \hlopt{>=} \hlnum{96}\hlstd{]} \hlkwb{<-} \hlnum{NA}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in num.drinks[num.drinks >= 96] <- NA: object 'num.drinks' not found}}\begin{alltt}
 \hlstd{> }\hlkwd{hist}\hlstd{(num.drinks,} \hlkwc{main}\hlstd{=}\hlstr{''}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{'How many drinks'}\hlstd{,}
 \hlstd{+ }  \hlkwc{col}\hlstd{=}\hlstr{'orange'}\hlstd{)}
 \end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-5-1.tex}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in hist(num.drinks, main = "{}"{}, xlab = "{}How many drinks"{}, col = "{}orange"{}): object 'num.drinks' not found}}\end{kframe}
 \end{knitrout}
     \end{frame}
 
@@ -196,9 +232,9 @@
 \hlstd{+ }  \hlkwc{xlab}\hlstd{=}\hlstr{'Age of first drink'}\hlstd{,}
 \hlstd{+ }  \hlkwc{ylab}\hlstd{=}\hlstr{'Number of drinks consumed'}\hlstd{)}
 \end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-6-1.tex}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(predvars, data, env): object 'num.drinks' not found}}\end{kframe}
 \end{knitrout}
     \end{frame}
 
@@ -211,23 +247,18 @@
 \hlstd{+ }  \hlkwc{xlab}\hlstd{=}\hlstr{'Age of first drink'}\hlstd{,}
 \hlstd{+ }  \hlkwc{ylab}\hlstd{=}\hlstr{'Number of drinks consumed'}\hlstd{)}
 \end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-7-1.tex}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in jitter(num.drinks, 4): object 'num.drinks' not found}}\end{kframe}
 \end{knitrout}
     \end{frame}
 
     \begin{frame}[fragile]
       The regression line is the line of ``best fit'' through this plot:
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-8-1.tex}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(predvars, data, env): object 'num.drinks' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(predvars, data, env): object 'num.drinks' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in abline(model, col = "{}red"{}, lwd = 4): object 'model' not found}}\end{kframe}
 \end{knitrout}
       \lc
     \end{frame}
@@ -253,35 +284,108 @@
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
 \hlstd{> }\hlstd{model} \hlkwb{<-} \hlkwd{lm}\hlstd{(num.drinks} \hlopt{~} \hlstd{age)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(predvars, data, env): object 'num.drinks' not found}}\begin{alltt}
 \hlstd{> }\hlkwd{summary}\hlstd{(model)}
 \end{alltt}
+\begin{verbatim}
 
+Call:
+lm(formula = num.drinks ~ age)
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in summary(model): object 'model' not found}}\end{kframe}
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.2035 -1.8528 -0.8528  0.8095 15.1602 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  6.55417    0.26532   24.70   <2e-16 ***
+age         -0.16883    0.01588  -10.63   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.963 on 3600 degrees of freedom
+  (2902 observations deleted due to missingness)
+Multiple R-squared:  0.03044,	Adjusted R-squared:  0.03017 
+F-statistic:   113 on 1 and 3600 DF,  p-value: < 2.2e-16
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
       \lc
     \end{frame}
 
     \begin{frame}[fragile]
       This translates to a regression line of:
+
+      \[
+        \widehat{\text{num drinks}} = 6.55 - 0.17 \cdot\text{age}
+      \]
+      \pause
+      Predict number of drinks for $\text{age}=21$:
+      \[
+        \widehat{\text{num drinks}}
+        = 6.55 - 0.17 \cdot 21
+        = 3.01
+      \]
+      Or we can use R to do the work for us:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(expr, envir, enclos): object 'model' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in eval(expr, envir, enclos): object 'model' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in summary(model): object 'model' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error in summary(model): object 'model' not found}}\end{kframe}
+\begin{alltt}
+\hlstd{> }\hlkwd{predict}\hlstd{(model,} \hlkwd{list}\hlstd{(}\hlkwc{age}\hlstd{=}\hlnum{21}\hlstd{))}
+\end{alltt}
+\end{kframe}
 \end{knitrout}
+      \lc
+    \end{frame}
 
+    \begin{frame}{How good are our predictions?}
+      $R^2$ quantifies how closely the model fits the data.
+      \begin{itemize}[<+->]
+        \item $R^2$ is the fraction of the variation of $Y$ explained by $X$.
+        \item $R^2=\text{cor}(X,Y)^2$, i.e., the squared correlation between $X$ and $Y$.
+        \item $R^2=0$ when the model has no predictive power at all.
+        \item $R^2=1$ when the model yields perfect predictions every time.
+        \item $R^2=\text{cor}(Y,\hat Y)^2$, i.e., the squared correlation between the actual and predicted values of $Y$.
+      \end{itemize}
+    \end{frame}
 
+    \begin{frame}[fragile]
+      \note{Point out where $R^2$ is found on the R output.}
+      \fontsize{9}{9}\selectfont
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{model} \hlkwb{<-} \hlkwd{lm}\hlstd{(num.drinks} \hlopt{~} \hlstd{age)}
+\hlstd{> }\hlkwd{summary}\hlstd{(model)}
+\end{alltt}
+\begin{verbatim}
 
+Call:
+lm(formula = num.drinks ~ age)
 
+Residuals:
+   Min     1Q Median     3Q    Max 
+-4.204 -1.853 -0.853  0.810 15.160 
 
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   6.5542     0.2653    24.7   <2e-16 ***
+age          -0.1688     0.0159   -10.6   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3 on 3600 degrees of freedom
+  (2902 observations deleted due to missingness)
+Multiple R-squared:  0.0304,	Adjusted R-squared:  0.0302 
+F-statistic:  113 on 1 and 3600 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}
+      In our regression, $R^2=0.03$, so $r=\sqrt{0.03}=0.17$.
+
+      Is this ``significant?'' \pause \alert{We'll discuss this next time!}
+    \end{frame}
+  \end{darkframes}
+
+\end{document}
