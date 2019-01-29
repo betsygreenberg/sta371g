@@ -16,7 +16,7 @@ Please do a few practice problems from the source that you choose though. It is 
 
 ## Readings from STA 309
 
-The reading assignments from STA 309 for these topics. I’ve included the STA 309 syllabus to help. Try reading the chapter and looking at the end of chapter review exercises. Your student solutions manual (in Pearson, with the etext) has solutions to all of the odd numbered problems.
+The reading assignments from STA 309 for these topics are in the book we use for STA 371G -- see [an example of a syllabus from STA 309 this semester](sta309-syllabus.pdf) to see which chapters in the book correspond to which topics. Try reading the chapter and looking at the end of chapter review exercises. Your student solutions manual (in MyStatLab, with the etext) has solutions to all of the odd numbered problems.
 
 ## Against All Odds videos
 
