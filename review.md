@@ -10,7 +10,7 @@ The most important topics to review for this course from any source are the foll
 -	Confidence Intervals (especially of means)
 -	Significance Tests (hypothesis testing – especially about means)
 
-Below are three sources of review material; all of them cover the topics and are free to use. It is a matter of person preference as to which one you prefer.
+Below are three sources of review material; all of them cover the topics and are free to use. It is a matter of personal preference as to which one you prefer.
 
 Please do a few practice problems from the source that you choose though. It is very easy to convince yourself that you understand something well because you watched a video or read a chapter, but this is not a good test of understanding. Being able to do relevant problems is a much better test.
 
