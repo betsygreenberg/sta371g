@@ -268,7 +268,7 @@ age         -0.1999713 -0.1376959
       \fullpagepicture{xkcd}
     \end{frame}
 
-    \begin{frame}{Correlation $\neq$ causation}
+    \begin{frame}{Correlation $\neq$ Causation}
       Because the $p$-value is small, we can be highly confident that there is a relationship in
       the population between age of first drink and number of drinks consumed as an adult.
 
@@ -280,11 +280,46 @@ age         -0.1999713 -0.1376959
       \begin{itemize}[<+->]
         \item Starting to drink earlier causes you to drink more as an adult.
         \item Being predisposed to drink more will cause you to start drinking sooner.
-        \item There is a third variable that causes both early drinking and drinking more as an adult.
+        \item There is a third (``lurking'') variable that causes both early drinking and drinking more as an adult.
       \end{itemize}
 
       \pause
       We can't tell just by looking at this data set!
+    \end{frame}
+
+    \begin{frame}
+      \begin{center}
+        \includegraphics[width=2.5in]{si}
+      \end{center}
+    \end{frame}
+
+    \begin{frame}{Regression to the mean}
+      The value of $Y$ will tend to be closer to the mean than $X$, on average (even if you switch $X$ and $Y$!).
+      \begin{itemize}
+        \item Students who take the SAT again after getting a very low score tend to improve even if they don't receive any coaching
+        \item Children of tall parents tend to be tall, but not as tall as their parents
+        \item Olympic champions tend to have poorer performances following their Olympic victories
+        \item The ``\emph{Sports Illustrated} curse'' of athletes that appear on the cover
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Regression to the mean}
+      \begin{columns}[onlytextwidth]
+        \column{.45\textwidth}
+          \begin{itemize}
+            \item In this graph, variables have been standardized, $r=0.8$, and $\hat Y = 0.8X$
+            \item Parent at mean $\to$ predict child height is also at the mean
+            \item Parent 1 SD above mean $\to$ predict child height 0.8 SD above the mean
+            \item Parent 2 SD above mean $\to$ predict child height 1.6 SD above the mean
+          \end{itemize}
+        \column{.5\textwidth}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-10-1.tex}
+
+\end{knitrout}
+      \end{columns}
+
     \end{frame}
 
   \end{darkframes}
