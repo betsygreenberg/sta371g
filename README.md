@@ -21,6 +21,10 @@ Short R help pages are available on a variety of topics:
 | Lecture 1: Introduction to predictive analytics | [Slides](slides/lecture-01/lecture-01.pdf) | |
 | Lecture 2: Simple regression | [Slides](slides/lecture-02/lecture-02.pdf) | [R script](lecture-scripts/lecture-02.R) |
 
+# Review
+
+[Here are some tips and resources](review.md) for reviewing material from STA 309.
+
 # R help sessions
 
 ## Videos
@@ -30,3 +34,6 @@ R help session videos are available on [YouTube](https://www.youtube.com/channel
 ## Scripts
 
 The scripts from the help sessions are available here:
+
+# PLUS
+
