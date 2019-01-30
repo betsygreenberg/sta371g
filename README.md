@@ -27,13 +27,9 @@ Short R help pages are available on a variety of topics:
 
 # R help sessions
 
-## Videos
-
-R help session videos are available on [YouTube](https://www.youtube.com/channel/UCvAAxbaNx74exieSPKzqUnw).
-
-## Scripts
-
-The scripts from the help sessions are available here:
+| Session | Video | R script |
+| ------- | ------ | -------- |
+| January 29 | [Video](https://www.youtube.com/watch?feature=youtu.be&v=hndsRNwqUXM&app=desktop) | [R script](help-session-scripts/session-01.R)
 
 # PLUS
 
