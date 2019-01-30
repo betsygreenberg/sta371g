@@ -74,6 +74,15 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
+    \begin{frame}{Announcements and logistics}
+      \begin{itemize}[<+->]
+        \item Reminder: Pretest due at Thursday 11:59 PM
+        \item The course help site (``Lecture slides and R help'' on the left side of Canvas) now has review advice and links to review videos
+        \item Course help site also has lecture slides and scripts, and slides, scripts, and videos from Tuesday night R help sessions
+        \item The ``Class kickoff survey'' closes tomorrow night; please complete it before then in Learning Catalytics to let me know of your previous experience (and so I can send you a free MyStatLab access code if you previously bought the 3rd edition of the book)
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}{Measuring goodness-of-fit}
       \begin{itemize}[<+->]
         \item $R^2$ measures the fraction of the variation in $Y$ explained by $X$;
@@ -117,8 +126,9 @@
 
     \begin{frame}{Two ways to test the overall null hypothesis}
       \begin{itemize}
-        \item The $F$-test (tests $H_0:R^2=0$ in the population)
-        \item The $t$-test for the \emph{slope} ($\beta_1$) coefficient (tests $H_0:\beta_1=0$)
+        \item The $F$-test (tests $H_0:R^2=0$ in the population vs $H_A:R^2\neq 0$)
+        \item The $t$-test for the \emph{slope} ($\beta_1$) coefficient (tests $H_0:\beta_1=0$ vs $H_A:\beta_1\neq 0$)
+        \item Note that both tests are two-tailed, since we would care about the null hypothesis being wrong in either direction (i.e. $\beta_1>0$ and $\beta_1<0$ are both of interest)
       \end{itemize}
       \pause
       Both of these methods are equivalent; the $p$-values will be exactly the same!
