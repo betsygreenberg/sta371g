@@ -28,9 +28,9 @@ Short R help pages are available on a variety of topics:
 
 # R help sessions
 
-| Session | Video | R script |
-| ------- | ------ | -------- |
-| January 29 | [Video](https://www.youtube.com/watch?feature=youtu.be&v=hndsRNwqUXM&app=desktop) | [R script](help-session-scripts/session-01.R)
+| Session | Video | Slides | R script |
+| ------- | ----- | ------ | -------- |
+| January 29 | [Video](https://www.youtube.com/watch?feature=youtu.be&v=hndsRNwqUXM&app=desktop) | [Slides](help-session-slides/session-01.pdf) | [R script](help-session-scripts/session-01.R)
 
 # PLUS
 
