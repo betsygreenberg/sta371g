@@ -20,6 +20,7 @@ Short R help pages are available on a variety of topics:
 | ------- | ------ | -------- |
 | Lecture 1: Introduction to predictive analytics | [Slides](slides/lecture-01/lecture-01.pdf) | |
 | Lecture 2: Simple regression | [Slides](slides/lecture-02/lecture-02.pdf) | [R script](lecture-scripts/lecture-02.R) |
+| Lecture 3: Inference for simple regression 1 | [Slides](slides/lecture-03/lecture-03.pdf) |  |
 
 # Review
 
