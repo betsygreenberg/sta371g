@@ -1,0 +1,264 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+\title{Residuals and autocorrelation 2}
+\subtitle{Lecture 6}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, prompt=T, tidy=F)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  stock.market <- read.csv("../../data/stock-market-returns.csv")
+  apple <- read.csv("../../data/apple.csv")
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \section{Unusual observations}
+
+    \begin{frame}{What a single case can do}
+      \begin{center}
+        Even a single case can wreak havoc on the regression line.
+        Let's add one outlier, at $X=5$, and see what happens with different
+        $Y$ values.
+      \end{center}
+    \end{frame}
+
+    \begin{frame}{What a single case can do}
+      <<echo=F>>=
+      library(MASS)
+      set.seed(1)
+      out <- mvrnorm(150, mu=c(0,0), Sigma=matrix(c(1, 0.56, 0.56, 1), ncol=2),
+                     empirical = TRUE)
+      x <- out[,1]
+      y <- out[,2]
+      nx <- c(x, 5)
+      ny <- c(y, 2.5)
+      plot(ny ~ nx, pch=16, col=c(rep("lightblue",150),"red"), xlab="X", ylab="Y")
+      model <- lm(ny ~ nx)
+      abline(model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{What a single case can do}
+      <<echo=F>>=
+      nx <- c(x, 5)
+      ny <- c(y, -5)
+      plot(ny ~ nx, pch=16, col=c(rep("lightblue",150),"red"), xlab="X", ylab="Y")
+      model <- lm(ny ~ nx)
+      abline(model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{What a single case can do}
+      <<echo=F>>=
+      nx <- c(x, 5)
+      ny <- c(y, -15)
+      plot(ny ~ nx, pch=16, col=c(rep("lightblue",150),"red"), xlab="X", ylab="Y")
+      model <- lm(ny ~ nx)
+      abline(model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{What a single case can do}
+      <<echo=F>>=
+      nx <- c(x, 5)
+      ny <- c(y, -35)
+      plot(ny ~ nx, pch=16, col=c(rep("lightblue",150),"red"), xlab="X", ylab="Y")
+      model <- lm(ny ~ nx)
+      abline(model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{blackmail}
+    \end{frame}
+
+    \begin{frame}{Regression is like blackmail}
+      Blackmail:
+      \begin{itemize}
+        \item Compromising information gives a blackmailer \alert{leverage}---the \emph{potential} to have a big impact
+        \item Once the blackmailer uses the information, that gives them \alert{influence}
+      \end{itemize}
+      \pause
+
+      Regression:
+      \begin{itemize}
+        \item When a point has a very unusual $X$ value (i.e., far from $\overline X$), it has \alert{leverage}---the \emph{potential} to have a big impact on the regression line
+        \item When that point \emph{also} has a $Y$ value that is out of line with the general trend, it will pull the regression line towards it---giving it \alert{influence}
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{How do I know what points are influential?}
+      \begin{itemize}[<+->]
+        \item \alert{Cook's distance} can be a useful metric for finding influential points
+        \item Larger values of Cook's distance indicate more influential points, but there is no firm cutoff
+        \item Use Cook's distance to help you find points that might be influential, and then run the regression both with and without the point to judge for yourself
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Using the Cook's distance plot in R}
+      <<fig.height=2.5>>=
+      plot(model, which=5)
+      @
+    \end{frame}
+
+    \section{Autocorrelation}
+
+    \begin{frame}{What is autocorrelation?}
+      \begin{itemize}[<+->]
+        \item The first assumption of regression is that the errors are independent.
+        \item In many time series data sets, this isn't the case---what happens in one time period is often correlated with those time periods right before or after.
+        \item \alert{Autocorrelation} is when we can consistently predict the value of a variable at a particular time based on other times.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{How can autocorrelation be detected?}
+      \begin{itemize}
+        \item Sometimes, it's clear that there is likely to be autocorrelation.
+        \item Any time that the value of a time series builds on the previous stage (e.g., daily stock price, annual revenue) autocorrelation is a likely danger.
+        \item But it's worth checking for autocorrelation in any time series!
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{What about when it's not obvious?}
+      The \alert{Durbin-Watson test} lets us test the null hypothesis that the errors in a regression come from a population where successive errors are uncorrelated.
+
+      \bigskip\pause
+
+      If we \textbf{reject} the null hypothesis, then there is evidence of autocorrelation, and the independence assumption is violated.
+    \end{frame}
+
+    \begin{frame}{Example}
+      Consider the stock market data from Lecture 4, when we regressed a company's weekly return on the weekly return of a market index (Wilshire 5000). Is autocorrelation present?
+
+      <<echo=F, fig.height=2.5>>=
+      amzn <- lm(AMZN ~ W5000, data=stock.market)
+      plot(AMZN ~ W5000, data=stock.market,
+        pch=16, col='cyan')
+      abline(amzn, col='orange', lwd=4)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Example}
+      \fontsm
+      <<message=F>>=
+      library(lmtest)
+      model <- lm(AMZN ~ W5000, data=stock.market)
+      dwtest(model)
+      @
+      Here, $p=\Sexpr{round(dwtest(model)$p.value, 2)}>0.05$, so we fail to reject the null hypothesis: there is no evidence of (first-order) autocorrelation. \pause (Surprised?)
+    \end{frame}
+
+    \begin{frame}{First-order?!}
+      \begin{itemize}
+        \item Durbin-Watson only lets us test for \alert{first-order} autocorrelation; that is, correlation between the error at time $t$ (today) and the error at time $t-1$ (yesterday, last month, last year, etc).
+        \item Sometimes the error at time $t$ is correlated not with time $t-1$ but time $t-2$ or $t-3$, etc.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Example}
+      Let's look at Apple's quarterly revenue since 2006:
+
+      <<echo=F, fig.height=2.5>>=
+      plot(ts(data=apple$Revenue.Billions, start=c(2006, 3), freq=4), xlab="Quarter", ylab="Revenue ($B)", col="lightgreen", lwd=3, type="b", pch=16)
+      @
+
+      What do you think the peaks correspond to?
+    \end{frame}
+
+    \begin{frame}{The autocorrelation function}
+      Another approach to suss out autocorrelation is to calculate all possible correlations with the time series and itself, ``lagged'' back by different time steps:
+
+      \bigskip
+
+      \begin{center}
+        <<echo=F>>=
+        library(data.table)
+        table <- cbind(apple$Revenue.Billions, shift(apple$Revenue.Billions, 1), shift(apple$Revenue.Billions, 2), shift(apple$Revenue.Billions, 3))
+        rownames(table) <- apple$Quarter
+        colnames(table) <- c("Apple revenue ($B)", "Lag 1", "Lag 2", "Lag 3")
+        kable(head(table, 6), row.names=T, booktabs=T)
+        @
+      \end{center}
+    \end{frame}
+
+    \begin{frame}[fragile]{The autocorrelation function}
+      The autocorrelations are highest for lag 1 and lag 4 (i.e., one quarter and one year ago):
+
+      <<fig.height=2>>=
+      acf(apple$Revenue.Billions)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{The autocorrelation function}
+      The autocorrelations are highest for lag 1 and lag 4 (i.e., one quarter and one year ago):
+
+      <<fig.height=2>>=
+      acf(apple$Revenue.Billions)
+      @
+    \end{frame}
+
+
+    \begin{frame}[fragile]{The autocorrelation function, applied to residuals}
+      \fontsm
+      What we really need to test is the autocorrelation of the \emph{residuals}, not of the revenue itself. Durbin-Watson suggests there is no first-order autocorrelation:
+
+      <<>>=
+      model <- lm(Revenue.Billions ~ Time, data=apple)
+      dwtest(model)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+
+      But there is clearly second- and fourth-order autocorrelation!
+
+      <<fig.height=2>>=
+      model <- lm(Revenue.Billions ~ Time, data=apple)
+      acf(residuals(model))
+      @
+
+      How do we interpret these--what accounts for this pattern?
+    \end{frame}
+
+    \begin{frame}
+      <<echo=F, fig.height=3>>=
+      plot(ts(data=apple$Revenue.Billions, start=c(2006, 3), freq=4), xlab="Quarter", ylab="Revenue ($B)", col="lightgreen", lwd=3, type="b", pch=16)
+      @
+    \end{frame}
+
+    \begin{frame}{How to handle autocorrelation}
+      \begin{itemize}[<+->]
+        \item When time-series data is used, it's important to check for autocorrelation.
+        \item If present, the independence assumption is violated, and we shouldn't trust the $p$-values and confidence intervals that come out of the regression.
+        \item There may be a way to transform the data to remove the autocorrelation: for example, stock prices have strong autocorrelation, but the percentage changes from day to day (or week to week, etc.) do not.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{A final note on regression assumptions}
+      \begin{itemize}[<+->]
+        \item The purpose of most regression assumptions is ensuring that the $p$-values and confidence intervals are accurate.
+        \item But nothing prevents you from building a regression even when the assumptions are violated!
+        \item Unless the linearity assumption is violated, the regression equation may still be useful for making predictions.
+      \end{itemize}
+    \end{frame}
+
+  \end{darkframes}
+
+\end{document}

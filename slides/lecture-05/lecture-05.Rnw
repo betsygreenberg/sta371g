@@ -1,0 +1,187 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+\title{Residuals and autocorrelation 1}
+\subtitle{Lecture 5}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, prompt=T, tidy=F)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  cars <- read.csv("../../data/cars.csv")
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}{Announcements}
+      \begin{itemize}
+        \item Homework 1 due Thursday at 11:59 PM, in MyStatLab
+        \item Submit an R script in Canvas that contains the commands you used for each problem
+      \end{itemize}
+    \end{frame}
+
+    \section{Transformations}
+
+    \begin{frame}{Residuals}
+      Recall that the \alert{residual} for the $i$th case in the data is $Y_i - \hat Y_i$.
+
+      \begin{itemize}
+        \item When the residual is \emph{positive}, the actual $Y$-value is \emph{higher} than our predicted $Y$-value.
+        \item When the residual is \emph{negative}, the actual $Y$-value is \emph{lower} than our predicted $Y$-value.
+      \end{itemize}
+
+      \bigskip
+
+      Looking at residuals can tell us a lot about how well a model is working, and give us ideas for how to improve it.
+    \end{frame}
+
+    \begin{frame}{Mileage efficiency data set}
+      The data set \texttt{cars} contains specs for \Sexpr{nrow(cars)} different cars. We'll focus on two variables:
+      \begin{itemize}
+        \item \textbf{MPG} is fuel efficiency, measured as miles per gallon
+        \item \textbf{Weight} is the weight of the car, in pounds
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{What problems do you see here?}
+      \fontsm
+      <<fig.height=2.4>>=
+      plot(MPG ~ Weight, data=cars, pch=16, col="lightblue")
+      model <- lm(MPG ~ Weight, data=cars)
+      abline(model, col="orange", lwd=4)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Using transformations to fix problems}
+      \begin{itemize}
+        \item Sometimes, a violation of regression assumptions can be fixed by transforming one or the other of the variables (or both).
+        \item When we transform a variable, we have to also transform our interpretation of the equation.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{A bad example}
+      \fontsm
+      What if we predict MPG from squared weight?
+      <<fig.height=2>>=
+      cars$WeightSq <- cars$Weight^2
+      plot(MPG ~ WeightSq, data=cars, pch=16, col="lightblue")
+      sq.model <- lm(MPG ~ WeightSq, data=cars)
+      abline(sq.model, col="orange", lwd=4)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{The log transformation}
+      The \alert{log} transformation is frequently useful in regression, because many nonlinear relationships are naturally exponential.
+
+      \bigskip
+
+      \begin{itemize}
+        \item $\log_b x = y$ when $b^y = x$.
+        \item For example, $\log_{10} 1000 = 3$, $\log_{10} 100 = 2$, and $\log_{10} 10 = 1$.
+        \item The natural log is $\log_e$, where $e \approx 2.72$ --- when we say ``log'' we will usually mean ``natural log.''
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{log}
+    \end{frame}
+
+    \begin{frame}[fragile]{Applying a log transformation}
+      \fontsm
+      <<fig.height=2>>=
+      cars$LogWeight <- log(cars$Weight)
+      plot(MPG ~ LogWeight, data=cars, pch=16, col="lightblue")
+      log.model <- lm(MPG ~ LogWeight, data=cars)
+      abline(log.model, col="orange", lwd=4)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Checking assumptions of our new model}
+      \fontsm
+      <<fig.height=2>>=
+      plot(cars$LogWeight, residuals(log.model), pch=16, col="pink")
+      @
+      Linearity looks good, but homoscedasticity is still not satisfied!
+    \end{frame}
+
+    \begin{frame}[fragile]{Applying a second log transformation}
+      \fontsm
+      <<fig.height=2>>=
+      cars$LogMPG <- log(cars$MPG)
+      plot(LogMPG ~ LogWeight, data=cars, pch=16, col="lightblue")
+      log.log.model <- lm(LogMPG ~ LogWeight, data=cars)
+      abline(log.log.model, col="orange", lwd=4)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Checking assumptions of our new model}
+      \fontsm
+      <<fig.height=2>>=
+      plot(cars$LogWeight, residuals(log.log.model), pch=16, col="pink")
+      @
+      Much better---transforming MPG to log(MPG) gives us both linearity and homoscedasticity!
+    \end{frame}
+
+    \begin{frame}{Thinking about transformations}
+      \begin{itemize}[<+->]
+        \item Thinking about whether you want to stretch or squeeze one of the axes, and apply a transformation accordingly (e.g., $\sqrt x$ or $\log x$ to squeeze; $x^2$ or $e^x$ to stretch).
+        \item Transformations of $Y$ can address both heteroscedasticity and nonlinearity; transformations of $X$ can only address nonlinearity.
+        \item You might need to transform both $X$ and $Y$; if so, start by transforming $Y$ to address the heteroscedasticity, and then transform $X$ to address nonlinearity if necessary.
+        \item It's OK to do a little trial and error!
+      \end{itemize}
+    \end{frame}
+
+    \section{Extrapolation}
+
+    \begin{frame}{Going beyond the data}
+      \begin{itemize}
+        \item It's natural to want to predict $Y$ beyond the $X$ values that we have in the data set (otherwise, why build a model in the first place?).
+        \item But things get dicey when trying to predict $Y$ for an $X$ value that is far from the other $X$ values in the data set: how can we be so sure that the observed trend continues?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      The shaded area shows the 95\% confidence interval for predicting the mean.
+      As $X$ moves away from $\overline X$, the CI becomes wider since we know our estimates are less precise.
+      <<echo=F>>=
+      library(MASS)
+      set.seed(1)
+      out <- mvrnorm(150, mu=c(0,0), Sigma=matrix(c(1, 0.56, 0.56, 1), ncol=2),
+                     empirical = TRUE)
+      x <- out[,1]
+      y <- out[,2]
+      model <- lm(y ~ x)
+      xs <- seq(from=-4, to=4, by=0.1)
+      plot(y ~ x, pch=16, col="lightblue", xlim=c(-4,4), ylim=c(-4,4), xlab="X", ylab="Y")
+      predictions <- predict(model, list(x=xs), interval="confidence")
+      polygon(x=c(xs, rev(xs)),
+              y=c(predictions[,"lwr"], rev(predictions[,"upr"])),
+              col=adjustcolor("dodgerblue", alpha.f=0.5),
+              border=NA)
+      abline(model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}
+      \begin{center}
+        There's nothing wrong with extrapolating a little bit beyond the data, but when you move beyond the data even the confidence intervals may \emph{underestimate} the degree of uncertainty.
+      \end{center}
+    \end{frame}
+  \end{darkframes}
+
+\end{document}
