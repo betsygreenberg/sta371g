@@ -14,6 +14,7 @@
   <<include=F, cache=F>>=
   par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
   cars <- read.csv("../../data/cars.csv")
+  prices <- read.csv("../../data/stock-market-prices.csv")
   @
 
   \frame{\maketitle}
@@ -135,6 +136,33 @@
       plot(cars$LogWeight, residuals(log.log.model), pch=16, col="pink")
       @
       Much better---transforming MPG to log(MPG) gives us both linearity and homoscedasticity!
+    \end{frame}
+
+    \begin{frame}{Another example}
+      Last class, we looked at predicting the \emph{returns} of AMZN based on the \emph{returns} of W5000. What if we just predicted the weekly closing \emph{price} of AMZN based on the price of W5000?
+
+      <<echo=F, fig.height=2.5>>=
+      plot(AMZN ~ W5000, data=prices, pch=16, col="green",
+                         xlab="W5000 closing price", ylab="AMZN closing price")
+      model <- lm(AMZN ~ W5000, data=prices)
+      abline(model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+      <<echo=F>>=
+      summary(model)
+      @
+    \end{frame}
+
+    \begin{frame}{Making a transformation to address the issues}
+      \begin{center}
+        The natural transformation of closing prices $\to$ returns address the issues with this model, as we saw last time---all assumptions are satisfied when using \% returns instead of absolute prices!
+
+        \pause\bigskip
+        \textbf{Key takeaway:} examine diagnostic plots of residuals to ensure regression assumptions are met; a high $R^2$ doesn't necessarily mean that model is appropriate!
+      \end{center}
     \end{frame}
 
     \begin{frame}{Thinking about transformations}

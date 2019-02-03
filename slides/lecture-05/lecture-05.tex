@@ -215,6 +215,53 @@
       Much better---transforming MPG to log(MPG) gives us both linearity and homoscedasticity!
     \end{frame}
 
+    \begin{frame}{Another example}
+      Last class, we looked at predicting the \emph{returns} of AMZN based on the \emph{returns} of W5000. What if we just predicted the weekly closing \emph{price} of AMZN based on the price of W5000?
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-8-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{verbatim}
+
+Call:
+lm(formula = AMZN ~ W5000, data = prices)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-237.747 -100.865    2.552   72.583  260.783 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -510.293     48.869  -10.44   <2e-16 ***
+W5000         57.333      2.996   19.14   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 120.4 on 259 degrees of freedom
+Multiple R-squared:  0.5858,	Adjusted R-squared:  0.5842 
+F-statistic: 366.2 on 1 and 259 DF,  p-value: < 2.2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}{Making a transformation to address the issues}
+      \begin{center}
+        The natural transformation of closing prices $\to$ returns address the issues with this model, as we saw last time---all assumptions are satisfied when using \% returns instead of absolute prices!
+
+        \pause\bigskip
+        \textbf{Key takeaway:} examine diagnostic plots of residuals to ensure regression assumptions are met; a high $R^2$ doesn't necessarily mean that model is appropriate!
+      \end{center}
+    \end{frame}
+
     \begin{frame}{Thinking about transformations}
       \begin{itemize}[<+->]
         \item Thinking about whether you want to stretch or squeeze one of the axes, and apply a transformation accordingly (e.g., $\sqrt x$ or $\log x$ to squeeze; $x^2$ or $e^x$ to stretch).
@@ -238,7 +285,7 @@
       As $X$ moves away from $\overline X$, the CI becomes wider since we know our estimates are less precise.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-8-1.tex}
+\input{/tmp/figures/unnamed-chunk-10-1.tex}
 
 \end{knitrout}
     \end{frame}
