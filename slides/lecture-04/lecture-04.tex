@@ -171,14 +171,16 @@
       \end{enumerate}
     \end{frame}
 
-    \begin{frame}{Assumption 1: Independence}
-      Independence means that knowing the value of a variable for one case doesn't tell you anything about another case.
+    \begin{frame}{Assumption 1: Independence of errors}
+      Independence means that knowing the error (over-/under-prediction by the regression line) for one case doesn't tell you anything about the error for another case.
+    \end{frame}
 
+    \begin{frame}{Assumption 1: Independence of errors}
       \begin{itemize}[<+->]
-        \item From last time: Knowing how much Bob drinks doesn't give us any suggestion as to how much Lisa drinks.
-        \item From today: Knowing the return this week doesn't tell us anything about the return next week, if we believe the efficient market hypothesis.
+        \item From last time: Knowing how much more Bob drinks than expected (based on the age he started drinking) doesn't give us any suggestion as to how much more Lisa drinks than expected.
+        \item From today: Knowing how much better or worse AMZN performs relative to the market \emph{last} week doesn't tell us anything about how much better or worse AMZN performs relative to the market \emph{this} week, if we believe the efficient market hypothesis.
         \item \alert{But:} Time-series data often violates the independence assumption!
-        \item We can only check this assumption by thinking about the situation conceptually.
+        \item We can often only verify this assumption by thinking about the situation conceptually.
       \end{itemize}
     \end{frame}
 
