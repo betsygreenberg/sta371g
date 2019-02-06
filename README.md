@@ -33,7 +33,7 @@ Short R help pages are available on a variety of topics:
 | Session | Video | Slides | R script |
 | ------- | ----- | ------ | -------- |
 | January 29 | [Video](https://www.youtube.com/watch?feature=youtu.be&v=hndsRNwqUXM&app=desktop) | [Slides](help-session-slides/session-01.pdf) | [R script](help-session-scripts/session-01.R)
-| February 5 | | [R script](help-session-scripts/session-02.R)
+| February 5 | | | [R script](help-session-scripts/session-02.R)
 
 # PLUS
 
