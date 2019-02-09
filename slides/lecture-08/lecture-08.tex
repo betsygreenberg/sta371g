@@ -175,7 +175,7 @@
 
     \begin{frame}
       \begin{center}
-        Since one of the assumptions is not completely satisfied, we'll proceed with caution---i.e., take the $p$-values and confidence intervals with a grain of salt.  (We could try and fix the problem with a transformation, but let's just live with it for now.)
+        Since one of the assumptions is not completely satisfied, we'll proceed with caution---i.e., take the $p$-values and confidence intervals with a grain of salt.  (We could try and fix the problem with a transformation, or by building different models for different subsets of the data, but let's just live with it for now.)
       \end{center}
     \end{frame}
 
@@ -195,7 +195,7 @@
 
       \bigskip\pause
 
-      In this model, the overall $p$-value is very small, so we reject the overall null hypothesis and conclude that yes, this model does have some predictive power.
+      In this model, the overall $p$-value is very small, so we reject the overall null hypothesis and conclude that yes, we have statistical significance and that this model does have some predictive power.
     \end{frame}
 
     \begin{frame}{Statistical vs practical significance}
@@ -207,7 +207,7 @@
 
     \begin{frame}{Testing individual coefficients}
       \begin{itemize}[<+->]
-        \item Next, we want to test $H_0 : \beta_i=0$ for each of the predictors $X_i$.
+        \item Next, we want to test $H_0 : \beta_i=0$ for each of the predictors $X_i$, for each $i=1,2,\ldots,k$.
         \item This is equivalent to the null hypothesis that $X_i$ has no correlation with $Y$ once the other predictors are held constant.
         \item The test statistic for testing the null hypothesis $\beta_i = S$ follows a $t$-distribution with $n-k-1$ degrees of freedom: \[ t = \frac{\beta_i - S}{\text{SE}(\beta_i)} \]
         \item The regression output calculates the $p$-value for us for testing the null hypotheses $\beta_i = 0$.
@@ -219,7 +219,7 @@
       If a predictor is not statistically significant, we should:
       \begin{enumerate}[<+->]
         \item Interpret it as if it were zero.
-        \item Remove it from the model, as it does not contribute to predicting $Y$ above and beyond the other predictors.
+        \item Remove it from the model (unless there are other reasons to keep it), as it does not contribute to predicting $Y$ above and beyond the other predictors.
       \end{enumerate}
     \end{frame}
 

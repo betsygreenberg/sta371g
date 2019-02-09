@@ -169,6 +169,16 @@
       @
     \end{frame}
 
+    \begin{frame}[fragile]
+      \fontsize{8}{8}
+      <<>>=
+      Random.numbers <- rnorm(nrow(my.sample))
+      model2 <- lm(Graduation.rate ~ Average.combined.SAT + In.state.tuition
+                     + Average.math.SAT, data=my.sample)
+      summary(model2)
+      @
+    \end{frame}
+
     \begin{frame}{Adjusted $R^2$}
       \begin{itemize}[<+->]
         \item There are many, many possible models (think of how many combinations of predictors there are!) so we need some criterion to determine which model is best.
