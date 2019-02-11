@@ -23,7 +23,7 @@ Short R help pages are available on a variety of topics:
 | Lecture 3: Inference for simple regression 1 | [Slides](slides/lecture-03/lecture-03.pdf) | [R script](lecture-scripts/lecture-03.R)|
 | Lecture 4: Inference for simple regression 2 | [Slides](slides/lecture-04/lecture-04.pdf) | [R script](lecture-scripts/lecture-04.R) |
 | Lecture 5: Residuals and autocorrelation 1 | [Slides](slides/lecture-05/lecture-05.pdf) | [R script](lecture-scripts/lecture-05.R) |
-| Lecture 6: Residuals and autocorrelation 2 | [Slides](slides/lecture-06/lecture-06.pdf) |  |
+| Lecture 6: Residuals and autocorrelation 2 | [Slides](slides/lecture-06/lecture-06.pdf) | [R script](lecture-scripts/lecture-06.R)  |
 | Lecture 7: Multiple regression 1 | [Slides](slides/lecture-07/lecture-07.pdf) |  |
 | Lecture 8: Multiple regression 2 | [Slides](slides/lecture-08/lecture-08.pdf) |  |
 
