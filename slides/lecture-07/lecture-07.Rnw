@@ -40,9 +40,16 @@
       Today's data set is a sample of \Sexpr{nrow(colleges)} colleges with various factors about the colleges, including SAT scores, student/faculty ratios, tuition rates, acceptance rates, etc.
     \end{frame}
 
+    \begin{frame}[fragile]{A quick data clean}
+      Many colleges have no SAT scores reported, so let's ignore those colleges (to enable a fair comparison) and also remove colleges with an obviously incorrect graduation rate of $>100\%$:
+      <<>>=
+      my.sample <- subset(colleges,
+        !is.na(Average.combined.SAT) & Graduation.rate <= 100)
+      @
+    \end{frame}
+
     \begin{frame}[fragile]
       <<echo=F>>=
-      my.sample <- subset(colleges, !is.na(Average.combined.SAT) & Graduation.rate <= 100)
       model.sat <- lm(Graduation.rate ~ Average.combined.SAT, data=my.sample)
       model.tuition <- lm(Graduation.rate ~ In.state.tuition, data=my.sample)
       options(digits=3)

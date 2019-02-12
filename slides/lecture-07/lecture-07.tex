@@ -82,6 +82,18 @@
       Today's data set is a sample of 1302 colleges with various factors about the colleges, including SAT scores, student/faculty ratios, tuition rates, acceptance rates, etc.
     \end{frame}
 
+    \begin{frame}[fragile]{A quick data clean}
+      Many colleges have no SAT scores reported, so let's ignore those colleges (to enable a fair comparison) and also remove colleges with an obviously incorrect graduation rate of $>100\%$:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{my.sample} \hlkwb{<-} \hlkwd{subset}\hlstd{(colleges,}
+\hlstd{+ }  \hlopt{!}\hlkwd{is.na}\hlstd{(Average.combined.SAT)} \hlopt{&} \hlstd{Graduation.rate} \hlopt{<=} \hlnum{100}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+    \end{frame}
+
     \begin{frame}[fragile]
 
       \begin{center}
@@ -155,7 +167,7 @@ F-statistic:  286 on 2 and 709 DF,  p-value: <2e-16
     \begin{frame}[fragile]
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-5-1.tex}
+\input{/tmp/figures/unnamed-chunk-6-1.tex}
 
 \end{knitrout}
     \end{frame}
@@ -163,7 +175,7 @@ F-statistic:  286 on 2 and 709 DF,  p-value: <2e-16
     \begin{frame}[fragile]
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-6-1.tex}
+\input{/tmp/figures/unnamed-chunk-7-1.tex}
 
 \end{knitrout}
     \end{frame}
