@@ -70,7 +70,7 @@
       \]
       The multiple regression model is
       \[
-        Y_i = \beta_0 + \beta_1 (\text{tuition}) + \beta_2 (\text{SAT}) + \epsilon_i.
+        Y_i = \beta_0 + \beta_1 (\text{SAT}) + \beta_2 (\text{tuition}) + \epsilon_i.
       \]
     \end{frame}
 
@@ -140,7 +140,7 @@
 
     \begin{frame}{What's the difference?!}
       \begin{itemize}[<+->]
-        \item The difference between ``the predicted effect of a 1-point increase in SAT score'' and ``the predicted effect of a 1-point increase in SAT score, holding tuition constant'' really are \alert{two different things}.
+        \item ``The predicted effect of a 1-point increase in SAT score'' and ``the predicted effect of a 1-point increase in SAT score, holding tuition constant'' really are \alert{two different things}.
         \item The relationship between $X_1$ and $Y$ may change when we \alert{control for} (i.e., add to the model) another predictor $X_2$.
       \end{itemize}
     \end{frame}
