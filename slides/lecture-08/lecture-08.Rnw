@@ -32,6 +32,10 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
+    \begin{frame}
+      \fullpagepicture{plus}
+    \end{frame}
+
     \begin{frame}{The colleges data set}
       Today's data set is a sample of \Sexpr{nrow(colleges)} colleges with various factors about the colleges, including SAT scores, student/faculty ratios, tuition rates, acceptance rates, etc.
     \end{frame}
