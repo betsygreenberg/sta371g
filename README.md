@@ -37,6 +37,6 @@ Short R help pages are available on a variety of topics:
 | ------- | ----- | ------ | -------- |
 | January 29 | [Video](https://www.youtube.com/watch?feature=youtu.be&v=hndsRNwqUXM&app=desktop) | [Slides](help-session-slides/session-01.pdf) | [R script](help-session-scripts/session-01.R)
 | February 5 | [Video](https://www.youtube.com/watch?v=7w38e3gE8zE) | | [R script](help-session-scripts/session-02.R)
-
+| February 12 |  | | [R script](help-session-scripts/session-03.R)
 # PLUS
 
