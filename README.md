@@ -25,7 +25,7 @@ Short R help pages are available on a variety of topics:
 | Lecture 5: Residuals and autocorrelation 1 | [Slides](slides/lecture-05/lecture-05.pdf) | [R script](lecture-scripts/lecture-05.R) |
 | Lecture 6: Residuals and autocorrelation 2 | [Slides](slides/lecture-06/lecture-06.pdf) | [R script](lecture-scripts/lecture-06.R)  |
 | Lecture 7: Multiple regression 1 | [Slides](slides/lecture-07/lecture-07.pdf) |  [R script](lecture-scripts/lecture-07.R)  |
-| Lecture 8: Multiple regression 2 | [Slides](slides/lecture-08/lecture-08.pdf) |  |
+| Lecture 8: Multiple regression 2 | [Slides](slides/lecture-08/lecture-08.pdf) | [R script](lecture-scripts/lecture-08.R) |
 
 # Review
 
