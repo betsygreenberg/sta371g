@@ -52,6 +52,13 @@
       \end{columns}
     \end{frame}
 
+    \begin{frame}{This is a different use of regression}
+      \begin{itemize}[<+->]
+        \item The purpose of this regression is not to make predictions---there are only 254 counties in Texas and we have data on all of them.
+        \item Instead, we are using regression here to \alert{understand the underlying factors} that explain doctor shortages.
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}[fragile]{Population as a predictor of number of physicians}
       <<fig.height=2>>=
       popmodel <- lm(Physicians ~ Population, data=counties)
@@ -61,11 +68,13 @@
     \end{frame}
 
     \begin{frame}[fragile]{Transform and Subset the data}
-      Let's define a new variable for physicians per 10,000 people:
+      Let's define a new variable for physicians per 10,000 people---this is important as absolute numbers aren't really what we care about (large counties have lots of doctors, which isn't a helpful fact!):
       <<>>=
       counties$PhysiciansPer10000 <-
         counties$Physicians / counties$Population * 10000
       @
+
+      \pause
 
       Then let's remove the very small counties as we can't reliably measure physician density in small counties:
       <<>>=
