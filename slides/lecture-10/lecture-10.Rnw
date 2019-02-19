@@ -166,6 +166,8 @@
       \begin{itemize}[<+->]
         \item The \texttt{Origin} variable has 3 ``levels''---US, EU, and JP---so we can't easily convert this into a 0/1 dummy variable.
         \item The solution is to create a dummy variable for \emph{each} level (category), and include \alert{all but one} of them as predictors in the model.
+        \item The category left out is the \alert{reference level} and all slope coefficients for dummy variables are interpreted as the difference between that category and the reference level.
+        \item If \emph{any} of the dummy variables are significant for a particular categorical variable, we consider the entire categorical variable to be significant!
       \end{itemize}
     \end{frame}
 
