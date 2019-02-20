@@ -2,6 +2,9 @@ colleges <- read.csv("https://raw.githubusercontent.com/brianlukoff/sta371g/mast
 my.sample <- subset(colleges, !is.na(Average.combined.SAT) & Graduation.rate <= 100)
 model <- lm(Graduation.rate ~ Average.combined.SAT + In.state.tuition, data=my.sample)
 summary(model)
+confint(model)
+confint(model, level=.99)
+
 plot(predict(model), residuals(model))
 plot(model)
 

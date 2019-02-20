@@ -12,7 +12,7 @@
 | Lecture 6: Residuals and autocorrelation 2 | [Slides](slides/lecture-06/lecture-06.pdf) | [R script](lecture-scripts/lecture-06.R)  |
 | Lecture 7: Multiple regression 1 | [Slides](slides/lecture-07/lecture-07.pdf) |  [R script](lecture-scripts/lecture-07.R)  |
 | Lecture 8: Multiple regression 2 | [Slides](slides/lecture-08/lecture-08.pdf) | [R script](lecture-scripts/lecture-08.R) |
-| Lecture 9: Model building: selecting a model | [Slides](slides/lecture-09/lecture-09.pdf) |  |
+| Lecture 9: Model building: selecting a model | [Slides](slides/lecture-09/lecture-09.pdf) | [R script](lecture-scripts/lecture-09.R) |
 | Lecture 10: Model building: dummy variables | [Slides](slides/lecture-10/lecture-10.pdf) |  |
 
 # Review
