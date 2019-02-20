@@ -31,6 +31,21 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
+    \begin{frame}{Midterm 1: Wednesday, February 27}
+      \begin{itemize}[<+->]
+        \item The midterm will be in this room; you'll have 75 minutes.
+        \item Bring your laptop (or borrow one from the Media Center) to take the test on.
+        \item You can use RStudio, the R documentation, and the R help pages as reference during the test.
+        \item You can also bring 1 page of your own notes to use during the test.
+        \item Do not spend a lot of time re-reading the book/notes; the best way to study is \alert{practicing by working new problems}:
+          \begin{itemize}
+            \item Extra credit problem set on MyStatLab
+            \item Practice exam on Canvas
+            \item More practice problems in MyStatLab: select Study Plan > All Chapters on the left menu
+          \end{itemize}
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}
       \fullpagepicture{doc-shortage}
     \end{frame}
