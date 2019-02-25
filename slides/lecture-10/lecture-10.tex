@@ -50,13 +50,12 @@
 
 \usepackage{alltt}
 \usepackage{../371g-slides}
-\usepackage{preview}
-\title{Model building: dummy variables}
+\usepackage{dcolumn}
+\title{Model building: selecting a model 2}
 \subtitle{Lecture 10}
 \author{STA 371G}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-  
   
   
 
@@ -72,310 +71,284 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
-    \begin{frame}
-      Let's predict fuel economy (miles per gallon) for different car models of the 70s.
-
-      \begin{center}
-        \includegraphics[width=2.5in]{bmw} \\
-      \end{center} \pause
-
-      \begin{columns}[onlytextwidth]
-        \column{.5\textwidth}
-          \begin{itemize}
-            \item Cylinders
-            \item Displacement
-            \item Horsepower
-          \end{itemize}
-        \column{.5\textwidth}
-          \begin{itemize}
-            \item Weight
-            \item Acceleration
-            \item Year (After 1975 or not)
-          \end{itemize}
-      \end{columns}
+    \begin{frame}{Reminders}
+      \begin{itemize}
+        \item Draft project proposal is due tonight at 11:59 PM.
+        \item Midterm 1 is on Wednesday during class; make sure to bring your laptop or borrow one from Media Services, and 1 page of notes. Midterm 1 covers material through Lecture 8.
+      \end{itemize}
     \end{frame}
 
-    \begin{frame}[fragile]{Exploring the data}
+    \begin{frame}
+      \fullpagepicture{doc-shortage}
+    \end{frame}
+
+    \begin{frame}[fragile]{Potential predictor variables}
+      \begin{itemize}
+        \item \textbf{LandArea}:       Area in square miles
+        \item \textbf{PctRural}:       Percentage rural land
+        \item \textbf{MedianIncome}:   Median household income
+        \item \textbf{Population}:     Population
+        \item \textbf{PctUnder18}:     Percent children
+        \item \textbf{PctOver65}:      Percent seniors
+        \item \textbf{PctPoverty}:     Percent below the poverty line
+        \item \textbf{PctUninsured}:   Percent without health insurance
+        \item \textbf{PctSomeCollege}: Percent with some higher education
+        \item \textbf{PctUnemployed}:  Percent unemployed
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Parsimony}
+      \begin{itemize}[<+->]
+        \item We want a model that has a high $R^2$ and a low $s_e$, because then the predictors are doing a good job of explaining $Y$---and our predictions will be more accurate.
+        \item We also want a model that is simple, so it's easy to explain to a non-expert.
+        \item The ideal model is \alert{parsimonious}: a good trade-off between simplicity (as few variables as possible) and a high $R^2$.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{General strategy}
+      \begin{enumerate}[<+->]
+        \item Use one or more procedures to generate candidate models: possible models that are worth considering.
+        \item Select the candidate model with a reasonable tradeoff simplicity and predictive power (high $R^2$).
+        \item Check assumptions and model diagnostics (more on this to come); apply transformations and other fixes if needed to the final model. If the problems are unfixable, select a different candidate model.
+      \end{enumerate}
+    \end{frame}
+
+    \begin{frame}{Backward stepwise regression}
+      \begin{enumerate}
+        \item Start with a ``full'' model containing all of the predictors.
+        \item Remove the least significant (highest $p$-value / smallest $t$-statistic) predictor.
+        \item Re-run the model with that predictor removed.
+        \item Repeat steps 2-3 until all predictors are significant.
+      \end{enumerate}
+    \end{frame}
+
+    \begin{frame}{Forward stepwise regression}
+      \begin{enumerate}
+        \item Start with a ``null'' model containing none of the predictors.
+        \item Try adding each predictor, one at a time, and pick the one that ends up being the most significant (lowest $p$-value / highest $t$-statistic) predictor.
+        \item Re-run the model with that predictor added.
+        \item Repeat steps 2-3 until no more significant predictors can be added.
+      \end{enumerate}
+    \end{frame}
+
+    \begin{frame}{Other stepwise regression possibilities}
+      \begin{itemize}
+        \item Add (or remove) variables one at a time based on the change in $R^2$,  Adjusted $R^2$, or AIC (another similar model fit criterion) when that variable is added (or removed).
+        \item Run the stepwise regression in both directions, allowing addition or removal of a variable at each step.
+        \item R's \texttt{step} function incorporates both of these methods.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{The problem with stepwise regression}
+      Stepwise regression will not necessarily give you the best model; by only adding or removing one variable at a time, you can get locked into a particular ``path'' that means you may never consider better models.
+    \end{frame}
+
+    \begin{frame}{Best subsets regression}
+      \begin{itemize}
+        \item Computers are fast! Just let R try out all of the $2^k-1$ possible models for you.
+        \item R will present you the model with the best Adjusted $R^2$ for each possible number of predictors.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Best-subsets regression}
       \fontsm
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlkwd{head}\hlstd{(cars)}
-\end{alltt}
-\begin{verbatim}
-  MPG Cylinders Displacement  HP Weight Acceleration After1975 Origin
-1  18         8          307 130   3504         12.0        No     US
-2  15         8          350 165   3693         11.5        No     US
-3  18         8          318 150   3436         11.0        No     US
-4  16         8          304 150   3433         12.0        No     US
-5  17         8          302 140   3449         10.5        No     US
-6  15         8          429 198   4341         10.0        No     US
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-      \pause
-      How do we handle the Yes/No data in the \texttt{After1975} column?
-    \end{frame}
-
-
-    \begin{frame}[fragile]{Are late-model cars different?}
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
-\begin{alltt}
-\hlkwd{boxplot}\hlstd{(MPG} \hlopt{~} \hlstd{After1975,} \hlkwc{data}\hlstd{=cars,} \hlkwc{ylab}\hlstd{=}\hlstr{"MPG"}\hlstd{,}
-              \hlkwc{xlab}\hlstd{=}\hlstr{"After 1975"}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{'darkgray'}\hlstd{)}
-\end{alltt}
-\end{kframe}
-\input{/tmp/figures/unnamed-chunk-4-1.tex}
-
-\end{knitrout}
-    \end{frame}
-
-    \begin{frame}[fragile]{Exploring the data}
-      To incorporate the \texttt{After1975} variable into a regression model, we create a \alert{dummy variable} called \texttt{LateModel} that maps a ``Yes'' to 1, and ``No'' to 0. \pause
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
-\begin{alltt}
-\hlstd{cars}\hlopt{$}\hlstd{LateModel} \hlkwb{<-}
-  \hlkwd{ifelse}\hlstd{(cars}\hlopt{$}\hlstd{After1975} \hlopt{==} \hlstr{"Yes"}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{)}
+\hlstd{> }\hlkwd{library}\hlstd{(leaps)}
+\hlstd{> }\hlkwd{plot}\hlstd{(}\hlkwd{regsubsets}\hlstd{(PhysiciansPer10000} \hlopt{~} \hlstd{LandArea} \hlopt{+} \hlstd{PctRural}
+\hlstd{+ }                 \hlopt{+} \hlstd{MedianIncome} \hlopt{+} \hlstd{Population} \hlopt{+} \hlstd{PctUnder18}
+\hlstd{+ }                 \hlopt{+} \hlstd{PctOver65} \hlopt{+} \hlstd{PctPoverty} \hlopt{+} \hlstd{PctUninsured}
+\hlstd{+ }                 \hlopt{+} \hlstd{PctSomeCollege} \hlopt{+} \hlstd{PctUnemployed,}
+\hlstd{+ }                 \hlkwc{data}\hlstd{=my.counties),} \hlkwc{scale}\hlstd{=}\hlstr{"adjr2"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-      \pause
-      Now let's a regression model using the predictors \texttt{Cylinders}, \texttt{Displacement}, \texttt{HP}, \texttt{Weight}, \texttt{Acceleration}, and \texttt{LateModel}.
     \end{frame}
 
     \begin{frame}
-      \begin{center}
-        R will actually create this ``dummy'' (0/1) variable for us automatically, when you put a categorical variable (what R calls a ``factor'' into a model).
-      \end{center}
+      \vspace{-1in}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-3-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}
+      \begin{itemize}
+        \item Best-subsets regression presents us with a candidate model for each possible number of predictors.
+        \item The label on the $y$-axis show the Adjusted $R^2$ value for the model corresponding to the filled-in squares for that row.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Putting things together}
+      \begin{itemize}[<+->]
+        \item Look at multiple statistics. They generally say similar things.
+        \item Find the \textbf{parsimonious} middle ground between an underspecified model and extraneous variables.
+        \item Fine-tune the model to ensure the model meets assumptions and captures key relationships: you may need to transform predictors and/or add interactions.
+        \item Think about logical reasons why certain predictors might be useful; don't just focus on $p$-values.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Check assumptions of the best model}
+      \fontsm
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{candidate} \hlkwb{<-} \hlkwd{lm}\hlstd{(PhysiciansPer10000} \hlopt{~} \hlstd{PctRural} \hlopt{+} \hlstd{PctOver65}
+\hlstd{+ }                  \hlopt{+} \hlstd{PctSomeCollege,} \hlkwc{data}\hlstd{=my.counties)}
+\hlstd{> }\hlkwd{plot}\hlstd{(candidate)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-5-1.tex}
+
+\end{knitrout}
+
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{mystery-spot}
+    \end{frame}
+
+    \begin{frame}{How reliable is $R^2$?}
+      \begin{itemize}[<+->]
+        \item The mystery data set contains 20 predictor variables X1-X20.
+        \item Backwards stepwise regression or best subsets regression yields a data set with multiple significant predictors.
+      \end{itemize}
     \end{frame}
 
     \begin{frame}[fragile]
-      \fontsm
+      \fontvsm
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{lm}\hlstd{(MPG} \hlopt{~} \hlstd{Cylinders} \hlopt{+} \hlstd{Displacement} \hlopt{+} \hlstd{HP} \hlopt{+} \hlstd{Weight} \hlopt{+}
-    \hlstd{Acceleration} \hlopt{+} \hlstd{After1975,} \hlkwc{data}\hlstd{=cars))}
+\hlstd{> }\hlstd{parsimonious.model} \hlkwb{<-} \hlkwd{lm}\hlstd{(Y} \hlopt{~} \hlstd{X10} \hlopt{+} \hlstd{X13} \hlopt{+} \hlstd{X16,} \hlkwc{data}\hlstd{=mystery)}
+\hlstd{> }\hlkwd{summary}\hlstd{(parsimonious.model)}
 \end{alltt}
 \begin{verbatim}
 
 Call:
-lm(formula = MPG ~ Cylinders + Displacement + HP + Weight + Acceleration + 
-    After1975, data = cars)
+lm(formula = Y ~ X10 + X13 + X16, data = mystery)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--8.9302 -2.5727 -0.2574  2.0630 15.0381 
+-2.5839 -0.6636 -0.0255  0.6312  3.5081 
 
 Coefficients:
-               Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  42.1939988  2.3687735  17.813  < 2e-16 ***
-Cylinders    -0.5840362  0.3601220  -1.622    0.106    
-Displacement  0.0074811  0.0079791   0.938    0.349    
-HP           -0.0198909  0.0147848  -1.345    0.179    
-Weight       -0.0059904  0.0007194  -8.327 1.46e-15 ***
-Acceleration  0.0354327  0.1103506   0.321    0.748    
-After1975Yes  4.3590043  0.4016220  10.853  < 2e-16 ***
+             Estimate Std. Error t value Pr(>|t|)  
+(Intercept)  0.006384   0.031188   0.205   0.8379  
+X10          0.074640   0.030694   2.432   0.0152 *
+X13         -0.065601   0.030809  -2.129   0.0335 *
+X16          0.071064   0.032880   2.161   0.0309 *
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 3.721 on 385 degrees of freedom
-Multiple R-squared:  0.7762,	Adjusted R-squared:  0.7727 
-F-statistic: 222.5 on 6 and 385 DF,  p-value: < 2.2e-16
+Residual standard error: 0.9857 on 996 degrees of freedom
+Multiple R-squared:  0.01434,	Adjusted R-squared:  0.01137 
+F-statistic: 4.829 on 3 and 996 DF,  p-value: 0.00242
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
     \end{frame}
 
-    \begin{frame}[fragile]{Dummy variables}
-      \texttt{After1975Yes} is 1 whenever \texttt{After1975} is ``Yes,'' and 0 otherwise:
-
-      \begin{table}[!b]
-        {\carlitoTLF % Use monospaced lining figures
-        \begin{tabularx}{\textwidth}{rrrrr}
-
-           MPG &  ... & Acceleration & After1975 & After1975Yes\\
-          \toprule
-            ... & ... & ... & ... & ... \\
-            25 & ... & 13.5 & No & 0 \\
-            33 & ... & 17.5 & No & 0 \\
-            28 & ... & 15.5 & Yes & 1 \\
-            25 & ... & 16.9 & Yes & 1 \\
-            ... & ... & ... & ... & ... \\
-          \bottomrule
-
-        \end{tabularx}}
-
-      \end{table}
-
-      \pause
-      Notice that we do not have a \texttt{After1975No} variable; it would cause problems because it would be perfectly correlated with \texttt{After1975Yes}.
-    \end{frame}
-
-    \begin{frame}[fragile]{Interpretation of the $\hat\beta$ of the dummy variable}
-      
-      Our regression equation is:
-      \[
-        \widehat{\text{MPG}} = 41.71 -
-        0.02 \cdot \text{HP} -
-        0.01 \cdot \text{Weight} +
-        4.33 \cdot \text{After1975Yes}.
-      \]
-      \pause
-
-      Let's interpret the coefficient 4.33.
-      Consider this:
+    \begin{frame}{Mystery revealed!}
       \begin{itemize}[<+->]
-        \item Model A and B have the same HP and Weight.
-        \item Model A was manufactured before 1975, whereas B was manufactured after 1975.
-        \item We predict Model B will have a MPG that is 4.33 higher than Model A.
+        \item This data set consists of nothing but random numbers!
+        \item Remember that when we set $\alpha=0.05$ as we usually do, our Type I error is 5\%, meaning 1 out of roughly every 20 variables will be significant just by chance.
+        \item As a result, it's dangerous to build a model by just selecting the most significant from among a large list of variables.
+        \item Doing so can result in \alert{overfitting}: creating a model that fits the noise in the data well but won't generalize well to new data.
+        \item In general, the $R^2$ of a model gives an overoptimistic view of how well it will generalize to new data.
       \end{itemize}
-      \lc
     \end{frame}
 
-    \begin{frame}[fragile]{Interpretation of the $\hat\beta$ of the dummy variable}
-      R has assigned ``Yes'' to 1 and ``No'' to 0 in our dummy variable, so the ``reference level'' is cars manufactured before 1975.
-      \pause\bigskip
+    \begin{frame}{Combatting overfitting with training and test sets}
+      \begin{center}
+        \tikzstyle{block} = [rectangle, draw, fill=darkgray,
+          text centered, minimum height=2em]
+        \tikzstyle{line} = [draw, -latex']
 
-      If we created a dummy variable \texttt{After1975No} that is 1 for cars manufactured \emph{before} 1975, what would the regression look like?
-    \end{frame}
+        \begin{tikzpicture}[auto]
+          \node [block, text width = 10cm] (all) {Original data set};
+          \node [block, below of=all, text width = 7cm, xshift=-1.5cm] (training) {Training set};
+          \node [block, right of=training, node distance = 5cm, text width = 3cm] (test) {Test set};
+        \end{tikzpicture}
+      \end{center}
 
-    \begin{frame}[fragile]{What if there are more than two categories?}
-      The \texttt{Origin} variable represents the country of manufacture:
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
-\begin{alltt}
-\hlkwd{boxplot}\hlstd{(MPG} \hlopt{~} \hlstd{Origin,} \hlkwc{data}\hlstd{=cars,} \hlkwc{ylab}\hlstd{=}\hlstr{"MPG"}\hlstd{,}
-              \hlkwc{xlab}\hlstd{=}\hlstr{"Origin"}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{'darkgray'}\hlstd{)}
-\end{alltt}
-\end{kframe}
-\input{/tmp/figures/unnamed-chunk-8-1.tex}
-
-\end{knitrout}
-    \end{frame}
-
-    \begin{frame}[fragile]{What if there are more than two categories?}
-      \begin{itemize}[<+->]
-        \item The \texttt{Origin} variable has 3 ``levels''---US, EU, and JP---so we can't easily convert this into a 0/1 dummy variable.
-        \item The solution is to create a dummy variable for \emph{each} level (category), and include \alert{all but one} of them as predictors in the model.
-        \item The category left out is the \alert{reference level} and all slope coefficients for dummy variables are interpreted as the difference between that category and the reference level.
-        \item If \emph{any} of the dummy variables are significant for a particular categorical variable, we consider the entire categorical variable to be significant!
+      \begin{itemize}
+        \item Split the data into a \alert{training set} and a \alert{test set} (a typical split is 70\% training set / 30\% test set).
+        \item We use the training set to build the model, and then evaluate the quality of the model on how well it predicts $Y$ in the test set.
       \end{itemize}
     \end{frame}
 
     \begin{frame}[fragile]
-      \fontsm\vspace{-0.15in}
+      \fontsm
+      First, we'll take 50 random cases for the test set (about 30\% of the $n=168$ cases in the whole data set), and the rest for the training set:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlstd{origin.model} \hlkwb{<-} \hlkwd{lm}\hlstd{(MPG} \hlopt{~} \hlstd{HP} \hlopt{+} \hlstd{Weight} \hlopt{+} \hlstd{After1975} \hlopt{+} \hlstd{Origin,} \hlkwc{data}\hlstd{=cars)}
-\hlkwd{summary}\hlstd{(origin.model)}
+\hlstd{> }\hlstd{test.cases} \hlkwb{<-} \hlkwd{sample}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{168}\hlstd{,} \hlnum{50}\hlstd{)}
+\hlstd{> }\hlstd{training.cases} \hlkwb{<-} \hlkwd{setdiff}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{168}\hlstd{, test.cases)}
+\hlstd{> }\hlstd{training.set} \hlkwb{<-} \hlstd{my.counties[training.cases,]}
+\hlstd{> }\hlstd{test.set} \hlkwb{<-} \hlstd{my.counties[test.cases,]}
 \end{alltt}
-\begin{verbatim}
+\end{kframe}
+\end{knitrout}
 
-Call:
-lm(formula = MPG ~ HP + Weight + After1975 + Origin, data = cars)
+      \pause
 
-Residuals:
-   Min     1Q Median     3Q    Max 
--9.705 -2.243 -0.199  1.816 13.789 
-
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  40.181974   0.874271   45.96   <2e-16 ***
-HP           -0.027984   0.009865   -2.84   0.0048 ** 
-Weight       -0.005160   0.000477  -10.81   <2e-16 ***
-After1975Yes  4.334280   0.392849   11.03   <2e-16 ***
-OriginJP      1.000586   0.611954    1.64   0.1029    
-OriginUS     -1.592573   0.561900   -2.83   0.0048 ** 
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 3.6 on 386 degrees of freedom
-Multiple R-squared:  0.787,	Adjusted R-squared:  0.784 
-F-statistic:  285 on 5 and 386 DF,  p-value: <2e-16
-\end{verbatim}
+      Then, we ``train'' the model using the cases in the \alert{training} set, instead of the whole data set:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{candidate} \hlkwb{<-} \hlkwd{lm}\hlstd{(PhysiciansPer10000} \hlopt{~} \hlstd{PctRural} \hlopt{+} \hlstd{PctOver65}
+\hlstd{+ }                  \hlopt{+} \hlstd{PctSomeCollege,} \hlkwc{data}\hlstd{=training.set)}
+\end{alltt}
 \end{kframe}
 \end{knitrout}
     \end{frame}
 
-    \begin{frame}[fragile]{A warning about categorical variables with numeric representations}
+    \begin{frame}[fragile]
+      Finally, we predict $Y$ for each value in the \alert{test} set using this model:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{predicted.y} \hlkwb{<-} \hlkwd{predict}\hlstd{(candidate, test.set)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+      \pause
+
+      We can calculate $R^2$ in the test set using the fact that $R^2 = \text{cor}(\hat Y, Y)^2$:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{y} \hlkwb{<-} \hlstd{test.set}\hlopt{$}\hlstd{PhysiciansPer10000}
+\hlstd{> }\hlkwd{cor}\hlstd{(predicted.y, y)}\hlopt{^}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+[1] 0.362666
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+      \pause
+
+      This is somewhat lower than the $R^2$ from the original model (0.45), but it's a fairer estimate of how good our model will perform on unseen data.
+    \end{frame}
+
+    \begin{frame}{Be careful of getting too crazy!}
       \begin{itemize}[<+->]
-        \item In the original dataset, the origin was represented as 1 for US, 2 for EU and 3 for JP.
-        \item We would \alert{not} want to just put these numbers in the regression as numbers, because then regression would treat this as if it were a quantitative variable!
-        \item Even though the representation in the file is numeric, it is still a categorical variable and should be treated as such.
+        \item A general guideline is that you should not even consider more than one variable for every 10 to 15 cases in your dataset.
+        \item Think about the meaning of the variables in your model. Be careful if the model looks too good to be true.
+        \item Do not just use a mechanical process for model selection and call it a day; you need to use your judgement and select a parsimonious model.
+        \item Consider using a training/test set split to ensure you are not ``capitalizing on chance.''
+        \item Don't forget to check the model assumptions for your final model!
       \end{itemize}
     \end{frame}
 
-    \begin{frame}[fragile]{A warning about categorical variables with numeric representations}
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-10-1.tex}
-
-\end{knitrout}
-    \end{frame}
-
-    \begin{frame}[fragile]{Statistical significance of a categorical variable}
-      While dealing with categorical variables, we want to look at the significance of the categorical variable as a whole, rather than looking at $p$-values of individual dummy variables.
-
-      \bigskip\pause
-
-      We want to test the \alert{compound null hypothesis}
-      \[
-        H_0 : \beta_{\text{US}} = \beta_{\text{JP}} = 0.
-      \]
-    \end{frame}
-
-    \begin{frame}[fragile]{Statistical significance of a categorical variable}
-      To do this, we look at the ANOVA table; the $p$-value on the Origin line ($2.4 \times 10^{-5}$) is the $p$-value for the compound null hypothesis $H_0 : \beta_{\text{US}} = \beta_{\text{JP}} = 0$.
-      \fontsm
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
-\begin{alltt}
-\hlkwd{anova}\hlstd{(origin.model)}
-\end{alltt}
-\begin{verbatim}
-Analysis of Variance Table
-
-Response: MPG
-           Df Sum Sq Mean Sq F value  Pr(>F)    
-HP          1  14433   14433  1096.0 < 2e-16 ***
-Weight      1   2392    2392   181.6 < 2e-16 ***
-After1975   1   1623    1623   123.2 < 2e-16 ***
-Origin      2    288     144    10.9 2.4e-05 ***
-Residuals 386   5083      13                    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-    \end{frame}
-
-    \begin{frame}{Practical significance of a categorical variable}
-      
-      Since $p<.05$, we can conclude that Origin is a statistically significant predictor of MPG.
-      But is it a \emph{practically} significant predictor?
-
-      \bigskip\pause
-
-      To do this, compare $R^2$ values, or standard error of residuals:
-
-      \bigskip
-
-      \begin{tabular}{lll}
-      \textbf{Model} & \textbf{$R^2$} & \textbf{Residual standard error} \\
-      \hline
-      \texttt{Origin} not included in model & 0.77 & 3.72 \\
-      \texttt{Origin} included in model & 0.79 & 3.63 \\
-      \hline
-      \end{tabular}
-
-      \bigskip
-
-      We have to decide if the increased precision is worth the extra complexity in the model.
-    \end{frame}
   \end{darkframes}
 
 \end{document}
