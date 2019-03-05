@@ -147,7 +147,7 @@
 
     \begin{frame}
       \begin{center}
-        R will actually create this ``dummy'' (0/1) variable for us automatically, when you put a categorical variable (what R calls a ``factor'' into a model).
+        R will actually create this ``dummy'' (0/1) variable for us automatically, when you put a categorical variable (what R calls a ``factor'', with ``levels'' which are just the different possible values that the categorical variable can take on) into a model.
       \end{center}
     \end{frame}
 
@@ -211,7 +211,7 @@ F-statistic: 222.5 on 6 and 385 DF,  p-value: < 2.2e-16
       \end{table}
 
       \pause
-      Notice that we do not have a \texttt{After1975No} variable; it would cause problems because it would be perfectly correlated with \texttt{After1975Yes}.
+      Notice that we do not have a \texttt{After1975No} variable; it would cause problems because it would be perfectly correlated with \texttt{After1975Yes}---a model with perfect multicollinearity will not run!
     \end{frame}
 
     \begin{frame}[fragile]{Interpretation of the $\hat\beta$ of the dummy variable}
@@ -242,7 +242,7 @@ F-statistic: 222.5 on 6 and 385 DF,  p-value: < 2.2e-16
       If we created a dummy variable \texttt{After1975No} that is 1 for cars manufactured \emph{before} 1975, what would the regression look like?
     \end{frame}
 
-    \begin{frame}[fragile]{What if there are more than two categories?}
+    \begin{frame}[fragile]{What if there are more than two categories/levels?}
       The \texttt{Origin} variable represents the country of manufacture:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
@@ -256,7 +256,7 @@ F-statistic: 222.5 on 6 and 385 DF,  p-value: < 2.2e-16
 \end{knitrout}
     \end{frame}
 
-    \begin{frame}[fragile]{What if there are more than two categories?}
+    \begin{frame}[fragile]{What if there are more than two categories/levels?}
       \begin{itemize}[<+->]
         \item The \texttt{Origin} variable has 3 ``levels''---US, EU, and JP---so we can't easily convert this into a 0/1 dummy variable.
         \item The solution is to create a dummy variable for \emph{each} level (category), and include \alert{all but one} of them as predictors in the model.
@@ -298,22 +298,6 @@ Multiple R-squared:  0.787,	Adjusted R-squared:  0.784
 F-statistic:  285 on 5 and 386 DF,  p-value: <2e-16
 \end{verbatim}
 \end{kframe}
-\end{knitrout}
-    \end{frame}
-
-    \begin{frame}[fragile]{A warning about categorical variables with numeric representations}
-      \begin{itemize}[<+->]
-        \item In the original dataset, the origin was represented as 1 for US, 2 for EU and 3 for JP.
-        \item We would \alert{not} want to just put these numbers in the regression as numbers, because then regression would treat this as if it were a quantitative variable!
-        \item Even though the representation in the file is numeric, it is still a categorical variable and should be treated as such.
-      \end{itemize}
-    \end{frame}
-
-    \begin{frame}[fragile]{A warning about categorical variables with numeric representations}
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-10-1.tex}
-
 \end{knitrout}
     \end{frame}
 
@@ -375,6 +359,22 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
       \bigskip
 
       We have to decide if the increased precision is worth the extra complexity in the model.
+    \end{frame}
+
+    \begin{frame}[fragile]{A warning about categorical variables with numeric representations}
+      \begin{itemize}[<+->]
+        \item In the original dataset, the origin was represented as 1 for US, 2 for EU and 3 for JP.
+        \item We would \alert{not} want to just put these numbers in the regression as numbers, because then regression would treat this as if it were a quantitative variable!
+        \item Even though the representation in the file is numeric, it is still a categorical variable and should be treated as such.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{A warning about categorical variables with numeric representations}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-12-1.tex}
+
+\end{knitrout}
     \end{frame}
   \end{darkframes}
 
