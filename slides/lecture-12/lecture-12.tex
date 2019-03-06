@@ -327,16 +327,16 @@ F-statistic:  605 on 3 and 1724 DF,  p-value: <2e-16
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
 \begin{alltt}
-\hlkwd{predict.lm}\hlstd{(model3,} \hlkwd{list}\hlstd{(}\hlkwc{Living.Area}\hlstd{=}\hlnum{2500}\hlstd{,} \hlkwc{Fireplace}\hlstd{=}\hlstr{'Yes'}\hlstd{),}
-  \hlkwc{interval}\hlstd{=}\hlstr{'prediction'}\hlstd{)}
+\hlkwd{predict}\hlstd{(model3,} \hlkwd{list}\hlstd{(}\hlkwc{Living.Area}\hlstd{=}\hlnum{2500}\hlstd{,} \hlkwc{Fireplace}\hlstd{=}\hlstr{"Yes"}\hlstd{),}
+  \hlkwc{interval}\hlstd{=}\hlstr{"prediction"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
      fit    lwr    upr
 1 301331 166362 436300
 \end{verbatim}
 \begin{alltt}
-\hlkwd{predict.lm}\hlstd{(model3,} \hlkwd{list}\hlstd{(}\hlkwc{Living.Area}\hlstd{=}\hlnum{2500}\hlstd{,} \hlkwc{Fireplace}\hlstd{=}\hlstr{'No'}\hlstd{),}
-  \hlkwc{interval}\hlstd{=}\hlstr{'prediction'}\hlstd{)}
+\hlkwd{predict}\hlstd{(model3,} \hlkwd{list}\hlstd{(}\hlkwc{Living.Area}\hlstd{=}\hlnum{2500}\hlstd{,} \hlkwc{Fireplace}\hlstd{=}\hlstr{"No"}\hlstd{),}
+  \hlkwc{interval}\hlstd{=}\hlstr{"prediction"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
      fit    lwr    upr

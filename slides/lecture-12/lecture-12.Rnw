@@ -194,10 +194,10 @@
     \begin{frame}[fragile]{Making predictions}
       Let's make predictions for the price of a 2500 sq ft house, both with and without a fireplace:
       <<>>=
-      predict.lm(model3, list(Living.Area=2500, Fireplace='Yes'),
-        interval='prediction')
-      predict.lm(model3, list(Living.Area=2500, Fireplace='No'),
-        interval='prediction')
+      predict(model3, list(Living.Area=2500, Fireplace="Yes"),
+        interval="prediction")
+      predict(model3, list(Living.Area=2500, Fireplace="No"),
+        interval="prediction")
       @
       \note{Discuss the meaning of the overlap here}
     \end{frame}
