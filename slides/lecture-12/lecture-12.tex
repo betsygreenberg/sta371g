@@ -73,8 +73,15 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
+    \begin{frame}{Announcements}
+      \begin{itemize}
+        \item Reminder to submit your team evaluations for Part 1 of the project by Friday at 11:59 PM.
+        \item Starting next Tuesday night, the R help session will move permanently to GSB 3.130 (lets us produce better video recordings of the session for people that cannot attend).
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}{Housing price data}
-      Today we'll consider 2007 housing price data set from Saratoga County, NY.
+      Today we'll consider a 2007 housing price data set from Saratoga County, NY.
       \begin{itemize}
         \item \textbf{Price}: price of house (\$)
         \item \textbf{Living.Area}: amount of living space (sq ft)
@@ -108,10 +115,31 @@
       \note{What is the reference level?}
     \end{frame}
 
+    \begin{frame}[fragile]{How much is a fireplace worth?}
+      Note that the coefficient represents the difference between the means, and the intercept in the mean price when Fireplace is ``No'':
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwd{tapply}\hlstd{(houses}\hlopt{$}\hlstd{Price, houses}\hlopt{$}\hlstd{Fireplace, mean)}
+\end{alltt}
+\begin{verbatim}
+    No    Yes 
+174653 239914 
+\end{verbatim}
+\begin{alltt}
+\hlnum{239914} \hlopt{-} \hlnum{174653}
+\end{alltt}
+\begin{verbatim}
+[1] 65261
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    \end{frame}
+
     \begin{frame}{What is the relationship between price and size?}
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-4-1.tex}
+\input{/tmp/figures/unnamed-chunk-5-1.tex}
 
 \end{knitrout}
     \end{frame}
@@ -198,7 +226,7 @@ F-statistic:  891 on 2 and 1725 DF,  p-value: <2e-16
       By adding the dummy variable, we are essentially fitting two regression lines:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-7-1.tex}
+\input{/tmp/figures/unnamed-chunk-8-1.tex}
 
 \end{knitrout}
     They have the same slope, but different intercepts
@@ -294,41 +322,6 @@ F-statistic:  605 on 3 and 1724 DF,  p-value: <2e-16
       \]
     \end{frame}
 
-    \begin{frame}
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-9-1.tex}
-
-\end{knitrout}
-    \end{frame}
-
-    \begin{frame}[fragile]{Main effects and interaction effects}
-      \fontsm
-      In the output, the coefficients for Living.Space and Fireplace are \alert{main effects}, and the coefficient for $\text{Living.Space}\cdot\text{Fireplace}$ is an \alert{interaction effect}.
-
-      
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(model3)}\hlopt{$}\hlstd{coefficients}
-\end{alltt}
-\begin{verbatim}
-                         Estimate Std. Error t value Pr(>|t|)
-(Intercept)                 40901     8234.7     5.0  7.5e-07
-Living.Area                    92        5.4    17.1  1.8e-60
-FireplaceYes               -37610    11024.9    -3.4  6.6e-04
-Living.Area:FireplaceYes       27        6.5     4.2  3.4e-05
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-      \pause
-      The main effect for Living.Area (92.36) represents the predicted incremental effect of each additional square foot of living space, when there is no fireplace present.
-
-      \bigskip\pause
-      When we have an interaction term in the model, we \emph{must} include the main effect as well!
-    \end{frame}
-
     \begin{frame}[fragile]{Making predictions}
       Let's make predictions for the price of a 2500 sq ft house, both with and without a fireplace:
 \begin{knitrout}
@@ -352,6 +345,41 @@ Living.Area:FireplaceYes       27        6.5     4.2  3.4e-05
 \end{kframe}
 \end{knitrout}
       \note{Discuss the meaning of the overlap here}
+    \end{frame}
+
+    \begin{frame}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-11-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}[fragile]{Main effects and interaction effects}
+      \fontsize{10}{10}\selectfont
+      In the output, the coefficients for Living.Space and Fireplace are \alert{main effects}, and the coefficient for $\text{Living.Space}\cdot\text{Fireplace}$ is an \alert{interaction effect}.
+
+      
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(model3)}\hlopt{$}\hlstd{coefficients}
+\end{alltt}
+\begin{verbatim}
+                         Estimate Std. Error t value Pr(>|t|)
+(Intercept)                 40901     8234.7     5.0  7.5e-07
+Living.Area                    92        5.4    17.1  1.8e-60
+FireplaceYes               -37610    11024.9    -3.4  6.6e-04
+Living.Area:FireplaceYes       27        6.5     4.2  3.4e-05
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+      \pause
+      The main effect for Living.Area (92.36) represents the predicted incremental effect of each additional square foot of living space, when there is no fireplace present.
+
+      \bigskip\pause
+      When we have an interaction term in the model, we \emph{must} include the main effect as well!
     \end{frame}
   \end{darkframes}
 \end{document}
