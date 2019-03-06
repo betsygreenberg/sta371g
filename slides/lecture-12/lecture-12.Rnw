@@ -84,7 +84,7 @@
     \begin{frame}{What is the relationship between price and size?}
       <<echo=F>>=
       options(scipen=5)
-      with(houses, plot(Price ~ Living.Area, pch=20, col=ifelse(Fireplace == "Yes", "red", "cyan"), xlab="Living Area (sq ft)", ylab="Price ($)"))
+      with(houses, plot(Price ~ Living.Area, pch=20, col=ifelse(Fireplace == "Yes", "lightcoral", "lightblue"), xlab="Living Area (sq ft)", ylab="Price ($)"))
       @
     \end{frame}
 
@@ -120,9 +120,9 @@
     \begin{frame}
       By adding the dummy variable, we are essentially fitting two regression lines:
       <<echo=F>>=
-      with(houses, plot(Price ~ Living.Area, pch=20, col=ifelse(Fireplace == "Yes", "red", "cyan"), xlab="Living Area (sq ft)", ylab="Price ($)"))
-      abline(model2$coefficients["(Intercept)"], model2$coefficients["Living.Area"], col="cyan")
-      abline(model2$coefficients["(Intercept)"] + model2$coefficients["FireplaceYes"], model2$coefficients["Living.Area"], col="red")
+      with(houses, plot(Price ~ Living.Area, pch=20, col=ifelse(Fireplace == "Yes", "lightcoral", "lightblue"), xlab="Living Area (sq ft)", ylab="Price ($)"))
+      abline(model2$coefficients["(Intercept)"], model2$coefficients["Living.Area"], col="lightblue", lwd=3)
+      abline(model2$coefficients["(Intercept)"] + model2$coefficients["FireplaceYes"], model2$coefficients["Living.Area"], col="lightcoral", lwd=3)
       @
     They have the same slope, but different intercepts
     \end{frame}
@@ -204,9 +204,9 @@
 
     \begin{frame}
       <<echo=F>>=
-      with(houses, plot(Price ~ Living.Area, pch=20, col=ifelse(Fireplace == "Yes", "red", "cyan"), xlab="Living Area (sq ft)", ylab="Price ($)"))
-      abline(model3$coefficients["(Intercept)"], model3$coefficients["Living.Area"], col="cyan")
-      abline(model3$coefficients["(Intercept)"] + model3$coefficients["FireplaceYes"], model3$coefficients["Living.Area"] + model3$coefficients["Living.Area:FireplaceYes"], col="red")
+      with(houses, plot(Price ~ Living.Area, pch=20, col=ifelse(Fireplace == "Yes", "lightcoral", "lightblue"), xlab="Living Area (sq ft)", ylab="Price ($)"))
+      abline(model3$coefficients["(Intercept)"], model3$coefficients["Living.Area"], col="lightblue", lwd=3)
+      abline(model3$coefficients["(Intercept)"] + model3$coefficients["FireplaceYes"], model3$coefficients["Living.Area"] + model3$coefficients["Living.Area:FireplaceYes"], col="lightcoral", lwd=3)
       @
     \end{frame}
 
