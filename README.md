@@ -29,7 +29,7 @@
 | February 12 | [Video](https://youtu.be/up_Wqd_5pZw) | | [R script](help-session-scripts/session-03.R)|
 | February 19 |  | [Slides](help-session-slides/session-04.pdf) | [R script](help-session-scripts/session-04.R)|
 | February 24 |[Video](https://youtu.be/6gbnhO4-9Lw) || [R script](help-session-scripts/Midterm1Review.R)|
-| March 5 | [Video](https://www.youtube.com/watch?v=gx2cWVzVrjU&feature=youtu.be) || [R script] (help-session-scripts/session-06.R)|
+| March 5 | [Video](https://www.youtube.com/watch?v=gx2cWVzVrjU&feature=youtu.be) || [R script](help-session-scripts/session-06.R)|
 
 # PLUS
 
