@@ -1,0 +1,363 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+\title{Model building: problems and fixing them}
+\subtitle{Lecture 14}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, tidy=F)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  library(car)
+  manager <- read.csv("../../data/manager.csv", na.strings="")
+  elections <- read.csv("../../data/elections.csv")
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}{Today's data set}
+      We're going to look at a data set of newly hired managers:
+      \begin{columns}[onlytextwidth]
+        \column{.5\textwidth}
+          \begin{itemize}
+            \item Salary (response)
+            \item Manager rating
+            \item Years of experience
+          \end{itemize}
+        \column{.5\textwidth}
+          \begin{itemize}
+            \item Years since graduation
+            \item Origin (internal or external hire)
+          \end{itemize}
+      \end{columns}
+    \end{frame}
+
+    \begin{frame}[fragile]{Data issues}
+      \begin{center}
+        Data scientists report that they spend \alert{70\% of their time on obtaining and cleaning the data}. Only 30\% is for statistical analysis.\bigskip \pause
+
+        Never run a regression without exploring and cleaning the data first!
+      \end{center}
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{debbie-downer}
+    \end{frame}
+
+    \begin{frame}
+      The most common issues:
+      \tableofcontents
+    \end{frame}
+
+    \section{Outliers}
+
+    \begin{frame}[fragile]{Exploring the data: Outliers}
+      Boxplots are commonly used to detect outliers. Let's start by looking at the Salary column.
+
+      <<fig.height=2>>=
+      boxplot(manager$Salary, xlab="Salary", horizontal=T)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Outliers}
+      <<>>=
+      subset(manager, Salary > 200)
+      subset(manager, Salary < 0)
+      @
+      \pause
+
+      We can deal with outliers in two ways.
+      \begin{itemize}[<+->]
+        \item If the result of \textbf{errors in the data}, we can try to correct or omit.
+        \item If not, consider omitting, but report on them separately.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Outliers}
+      Let's omit the outliers by creating a new data set \texttt{mclean} that consists of the subset of the data where the salary is between \$0 and \$200,000.
+      <<>>=
+      mclean <- subset(manager, Salary > 0 & Salary < 200)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Outliers}
+      <<fig.height=2.5>>=
+      boxplot(mclean$YearsExp, xlab="Years of Experience",
+        horizontal=T)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Outliers}
+      99 must be a code for missing entry in the Years of Experience variable!
+
+      \bigskip\pause
+
+      Let's label all 99s as \texttt{NA} (``not available'' --- R's code for missing data). \pause
+      <<>>=
+      mclean$YearsExp[mclean$YearsExp == 99] <- NA
+      @
+    \end{frame}
+
+    \section{Missing data}
+
+    \begin{frame}[fragile]{Exploring the data: Missing entries}
+      Let's see if we have other missing data. \pause
+      <<>>=
+      mclean[!complete.cases(mclean),]
+      @
+      \pause
+      This isn't surprising---it is very common to have missing entries in your data.
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Missing entries}
+      There are two ways of dealing with missing data:
+      \begin{itemize}
+        \item Omit the rows that have missing entries in it.
+        \item Try to predict values to fill the missing entries.
+      \end{itemize}
+      Omitting data is the easiest, but often not the best way, \alert{because you lose all the other information available in the same row}.
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Missing entries}
+      What should we replace the \texttt{NA}s in the Manager Rating and Years of Experience columns with? \pause \bigskip
+
+      The simplest way would be to use the averages in the respective columns.
+
+      <<>>=
+      mclean$MngrRating[is.na(mclean$MngrRating)] <-
+        mean(mclean$MngrRating, na.rm=T)
+
+      mclean$YearsExp[is.na(mclean$YearsExp)] <-
+        mean(mclean$YearsExp, na.rm=T)
+      @
+
+      \pause \bigskip
+      A smarter and more advanced way is to predict the missing data from the other data (using regression!).
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Missing entries}
+      What about the missing data for categorical variables? \pause
+      Let's choose the easy way and omit them.
+
+      <<>>=
+      mclean <- na.omit(mclean)
+      @
+      \pause
+      This removes all the rows that contain missing entries (only the Origin column has missing entries in this case.) \pause \bigskip
+
+      We could also predict the missing entries, or treat the missing entries as a seperate level (e.g. ``Unknown'').
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Missing entries}
+      \begin{itemize}[<+->]
+        \item While dealing with the missing data, we assume that the data is ``Missing Completely at Random'' (MCAR).
+        \item If this assumption does not hold (e.g. if the missing data mostly belongs to external hires), the model will  be biased.
+        \item Making predictions for missing data based on available data reinforces the existing relationships between variables, so impacts the standard error.
+        \item If a lot of data is missing (e.g. more than 5\%) for a particular variable, you may have to discard the whole column.
+      \end{itemize}
+    \end{frame}
+
+    \section{Multicollinearity}
+
+    \begin{frame}[fragile]{Exploring the data: Multicollinearity}
+      Multicollinearity exists whenever 2+ predictors in a regression model are moderately or highly correlated. \pause
+      \begin{itemize}[<+->]
+        \item If two predictors $X_1$ and $X_2$ are highly correlated, it is hard to estimate the effect of changing $X_1$ while keeping $X_2$ constant.
+        \item This means we will have large standard errors, and large p-values, for $X_1$ and/or $X_2$.
+        \item This \alert{does not} mean there isn't a relationship between $X_1$ and $Y$, or $X_2$ and $Y$ -- it just means we can't pin down that relationship, because of the correlation!
+      \end{itemize}
+      \pause
+      Correlation between the response and the predictors is good, but correlation between the predictors is not!
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Multicollinearity}
+      We want to avoid multicollinearity in our models! \pause
+      \begin{itemize}[<+->]
+        \item Any conclusions based on the p-values, coefficients, and confidence intervals of the highly correlated variables will be unreliable.
+        \item These statistics will not be stable: adding new data or predictors to the model could drastically change them.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]%{Exploring the data: Multicollinearity}
+      \fontsize{9}{9}\selectfont
+      <<fig.height=3>>=
+      pairs(~ MngrRating + YearsExp + YrsSinceGrad, data=mclean)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]%{Exploring the data: Multicollinearity}
+      \fontsize{8}{8}\selectfont
+      <<>>=
+      model <- lm(Salary ~ MngrRating + YearsExp + YrsSinceGrad + Origin,
+                 data=mclean)
+      summary(model)
+      @
+      \note{Point out the high standard errors}
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Multicollinearity}
+      One way to see if two variables are collinear is to check the correlation between the two:
+      <<>>=
+      cor(mclean$YearsExp, mclean$YrsSinceGrad)
+      @
+      \pause
+      Any correlation $\geq 0.95$ is definitely a problem, but smaller correlations could be problematic too.
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Multicollinearity}
+      A better way to check multicollinearity is using Variance Inflation Factors (VIF).
+
+      \begin{itemize}[<+->]
+        \item The VIF is
+          \[
+            \text{VIF}(\beta_j) = \frac{1}{1 - R_j^2},
+          \]
+          where $R_j^2$ is the $R^2$ in a regression predicting $X$ variable $j$ from the other $X$ variables.
+        \item $\text{VIF}(\beta_j)=0$ when $R_j^2=0$; i.e., the $j$th predictor variable is completely independent from the others.
+        \item $\text{VIF}(\beta_j)$ increases as $R_j^2$ does, and is $\infty$ when there is perfect multicollinearity; i.e., when $X_j$ is perfectly predictable from the other $X$ variables.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Exploring the data: Multicollinearity}
+      <<>>=
+      library(car)
+      vif(model)
+      @
+      Predictors with $\text{VIF} > 5$ indicate multicollinearity.
+      \pause\bigskip
+
+      \alert{Remember:} Multicollinearity could exist between more than two predictors (this is why there are only $n-1$ dummy variables for a categorical variable with $n$ values).
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{debbie-downer}
+    \end{frame}
+
+    \begin{frame}{Dealing with multicollinearity}
+      There are two general strategies for dealing with multicollinearity:
+      \begin{itemize}
+        \item Drop a variable with a high VIF factor. (Just like we drop one of the dummy variables when putting a categorical variable in the model!)
+        \item Combine the variables that correlate into a composite variable.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]%{Exploring the data: Multicollinearity}
+      \fontsize{9}{9}\selectfont
+      <<>>=
+      model2 <- lm(Salary ~ MngrRating + YearsExp + Origin, data=mclean)
+      summary(model2)
+      @
+    \end{frame}
+
+    \section{Highly influential points}
+
+    \begin{frame}[fragile]{Finding highly influential points}
+      <<echo=F>>=
+      plot(model2, which=5, pch=16, col="lightblue")
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Outliers among the residuals}
+      Let's look at row 157:
+      <<fig.height=2.5>>=
+      manager[157,]
+      @
+      Someone with only 1 year of experience and a poor rating is hired as manager at \$95K! \pause \bigskip
+
+      If you decide that this is an anomaly (e.g. the CEO's son was promoted!) that you don't want to include in your analysis, omit that row and report on it separately in your conclusions.
+    \end{frame}
+
+    \begin{frame}[fragile]{Influential cases}
+      \begin{itemize}[<+->]
+        \item The Residuals vs Leverage plot tells about \alert{influential cases}.
+        \item A \textbf{high-leverage case} is one that has an unusual combination of predictor values.
+        \item An \textbf{influential case} is a high-leverage case that also has a high residual: it could change your $\beta$ values significantly when excluded from your analysis, i.e., it does not follow the overall trend.
+        \item Look for the cases on the upper/lower right corners (beyond the dashed curves).
+      \end{itemize}
+    \end{frame}
+
+    \section{Handling nonlinearity}
+
+    \begin{frame}[fragile]
+      Let's look at the total number of votes the winning candidate for U.S. President has won since 1988:
+      <<fig.height=2>>=
+      plot(Votes ~ Year, data=elections, pch=16, col="lightgreen")
+      @
+      \pause Is a line a good fit for this data?
+      \pause Is there any kind of transformation of either $X$ or $Y$ that can fix this nonlinearity?
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<>>=
+      elections$Time <- elections$Year - 1988
+      model1 <- lm(Votes ~ Time, data=elections)
+      @
+      <<echo=F>>=
+      x <- seq(1988, 2016, 0.1)
+      plot(Votes ~ Year, data=elections, pch=16, col="lightgreen")
+      lines(x, predict(model1, list(Time=x-1988, TimeSquared=(x-1988)^2, TimeCubed=(x-1988)^3)), col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{debbie-downer}
+    \end{frame}
+
+    \begin{frame}{Let's try to fit a polynomial!}
+      \begin{itemize}[<+->]
+        \item Think of a transformation of $X$ or $Y$ as fitting a curve to the data; for example, $X\to\log X$ fits a logarithmic curve to the data.
+        \item A polynomial is a function of the form
+          \[ f(x) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \cdots + \beta_n x^n, \]
+        for some $n$. We can fit a polynomial curve to our data by just adding the higher order $X^k$ terms as predictor variables to our regression model!
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<>>=
+      elections$TimeSquared <- elections$Time^2
+      model2 <- lm(Votes ~ Time + TimeSquared, data=elections)
+      @
+      <<echo=F>>=
+      plot(Votes ~ Year, data=elections, pch=16, col="lightgreen")
+      lines(x, predict(model2, list(Time=x-1988, TimeSquared=(x-1988)^2, TimeCubed=(x-1988)^3)), col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<>>=
+      elections$TimeCubed <- elections$Time^3
+      model3 <- lm(Votes ~ Time + TimeSquared +
+                             TimeCubed, data=elections)
+      @
+      <<echo=F>>=
+      plot(Votes ~ Year, data=elections, pch=16, col="lightgreen")
+      lines(x, predict(model3, list(Time=x-1988, TimeSquared=(x-1988)^2, TimeCubed=(x-1988)^3)), col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{Nonlinearity}
+      \begin{itemize}
+        \item Just like model selection with any other variable: use the statistical significance of the highest order term, and changes in $R^2$, to determine how many powers you should add.
+        \item If you include a power $X^k$, you should also include $X, X^2, \ldots, X^{k-1}$, even if they are not statistically significant.
+        \item Be particularly careful with extrapolation when using a polynomial model!
+      \end{itemize}
+    \end{frame}
+
+  \end{darkframes}
+
+  \end{document}
