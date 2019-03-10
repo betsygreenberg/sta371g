@@ -16,6 +16,7 @@
 | Lecture 10: Model building: selecting a model 2 | [Slides](slides/lecture-10/lecture-10.pdf) | [R script](lecture-scripts/lecture-10.R) |
 | Lecture 11: Model building: dummy variables | [Slides](slides/lecture-11/lecture-11.pdf) | [R script](lecture-scripts/lecture-11.R) |
 | Lecture 12: Model building: interactions 1 | [Slides](slides/lecture-12/lecture-12.pdf) | [R script](lecture-scripts/lecture-12.R) |
+| Lecture 13: Model building: interactions 2 | [Slides](slides/lecture-13/lecture-13.pdf) |  |
 
 # Review
 
