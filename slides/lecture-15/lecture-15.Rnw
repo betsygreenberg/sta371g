@@ -1,0 +1,208 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+\title{Model building: time and seasonality}
+\subtitle{Lecture 15}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, tidy=F)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  apple <- read.csv("../../data/apple.csv")
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}[fragile]
+      \fontsm
+      Let's try to forecast Apple's quarterly revenue, in billions of dollars:
+      <<fig.height=2.75>>=
+      plot(Revenue.Billions ~ Time, data=apple,
+        type="l", col="lightblue", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}
+      What do we see here?
+      \begin{itemize}[<+->]
+        \item \greencheckmark A \alert{trend} component: revenue is increasing over the long run.
+        \item \greencheckmark A \alert{seasonal} component: revenue is higher in some quarters than others.
+        \item \redx No \alert{cyclic} component: things just seem to be going up over time.
+        \item \greencheckmark An \alert{irregular} component: there is definitely quarter-by-quarter variation that is not accounted for by the other components. (This is the part that can't be modeled!)
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+      Based on our analysis, it seems like a reasonable model would look something like   this:
+      \[
+        \text{Revenue} = \text{Trend} + \text{Seasonality} + \text{Error}
+      \]
+      This looks a lot like a regression model!
+    \end{frame}
+
+    \begin{frame}{Using regression to model time series}
+      When we use regression to model time series, we almost always violate the independence assumption!
+
+      \bigskip\pause
+
+      That's OK as long as we don't want to any inference (i.e., use the p-values or construct confidence intervals). Usually with time series our main goal is \alert{forecasting}.
+    \end{frame}
+
+    \begin{frame}[fragile]{Take 1: Model with a trend component}
+      \fontvsm
+      <<fig.height=2.5>>=
+      trend.model <- lm(Revenue.Billions ~ Time, data=apple)
+      plot(Revenue.Billions ~ Time, data=apple,
+        type="l", col="lightblue", lwd=3)
+      abline(trend.model, col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{Take 1: Making predictions}
+      The prediction equation is:
+      <<echo=F>>=
+      options(digits=2)
+      @
+      \[
+        \widehat{\text{Revenue}} =
+          \Sexpr{coefficients(trend.model)["(Intercept)"]} +
+          \Sexpr{coefficients(trend.model)["Time"]} \cdot\text{Time}
+      \]
+      To extrapolate the model out into the future, we just have to figure out what the value of the Time variable is for the time period we want to  forecast. \pause For example, the last time period is Q4 2018, which is $\text{Time}=50$, so Q1 2019 is $\text{Time}=51$:
+      \[
+        \widehat{\text{Q2 2019 revenue}} =
+          \Sexpr{coefficients(trend.model)["(Intercept)"]} +
+          \Sexpr{coefficients(trend.model)["Time"]} \cdot 51
+      \]
+    \end{frame}
+
+    \begin{frame}[fragile]{Take 2: Model with trend and seasonal components}
+      What's wrong with this?
+      <<>>=
+      seasonal.model <- lm(Revenue.Billions ~ Time + Quarter,
+        data=apple)
+      @
+      \pause
+      It treats Quarter as a quantitative variable, which implies a linear relationship between Quarter and Revenue, which we can see is not true (revenue is lowest in Q2, not Q1):
+      <<echo=F>>=
+      options(digits=4)
+      @
+      <<>>=
+      tapply(apple$Revenue.Billions, apple$Quarter, mean)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+      We need to tell R that Quarter should be treated as a categorical variable (what R calls a ``factor''):
+      <<>>=
+      apple$QuarterCat <- as.factor(apple$Quarter)
+      seasonal.model <- lm(Revenue.Billions ~ Time +
+        QuarterCat, data=apple)
+      @
+      \pause
+      <<echo=F, fig.height=2.5>>=
+      plot(Revenue.Billions ~ Time, data=apple, type="l", col="lightblue", lwd=3)
+      lines(apple$Time, predict(seasonal.model), col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{Take 3: a multiplicative model}
+      Our predictions seem to be \alert{overestimating} the seasonal fluctuations early on, and \alert{underestimating} them in more recent years, because our linear model assumes that the effect of each season is an additive constant each year.
+
+      \bigskip\pause
+      A \alert{multiplicative model}, where we estimate $Y$ as a function of the product of trend, seasonality, and irregular (error) components, could help:
+      \[
+        \text{Revenue} = (\text{Trend})(\text{Seasonality})(\text{Error})
+      \]
+      \pause
+      How do we model that with regression?
+    \end{frame}
+
+    \begin{frame}{Take 3: a multiplicative model}
+      \fontsm
+      Take the log of both sides:
+      \begin{equation*}
+        \begin{split}
+          \text{Revenue} &= (\text{Trend})(\text{Seasonality})(\text{Error}) \\
+          \log\text{Revenue} &= \log\left( (\text{Trend})(\text{Seasonality})(\text{Error}) \right) \\
+          \log\text{Revenue} &= \log\text{Trend} + \log\text{Seasonality} + \log\text{Error} \\
+        \end{split}
+      \end{equation*}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+      <<>>=
+      mult.model <- lm(log(Revenue.Billions) ~ log(Time) +
+        QuarterCat, data=apple)
+      @
+      \pause
+      <<echo=F, fig.height=2.5>>=
+      plot(Revenue.Billions ~ Time, data=apple, type="l", col="lightblue", lwd=3)
+      lines(apple$Time, exp(predict(mult.model)), col="orange", lwd=3)
+      @
+      \pause
+      In Q4 2011, the revenue jumped to \$46.33B, by far the highest quarterly revenue ever! Our model is not accounting for this jump---what happened?
+    \end{frame}
+
+    \begin{frame}
+      \fullpagepicture{timcook}
+    \end{frame}
+
+    \begin{frame}[fragile]{Take 4: incorporating Tim Cook}
+      Let's define a dummy variable that is 1 when Tim Cook is CEO for the full quarter (when $\text{Time}\geq 22$; i.e., starting in Q4 2011) and 0 otherwise:
+      <<>>=
+      apple$TimCookEra <- ifelse(apple$Time >= 22, 1, 0)
+      @
+      Then, let's add this as an additional predictor variable to the model:
+      <<>>=
+      mult.model2 <- lm(log(Revenue.Billions) ~ log(Time) +
+        QuarterCat + TimCookEra, data=apple)
+      @
+    \end{frame}
+
+    \begin{frame}{Take 4: incorporating Tim Cook}
+      <<echo=F>>=
+      plot(Revenue.Billions ~ Time, data=apple, type="l", col="lightblue", lwd=3)
+      lines(apple$Time, exp(predict(mult.model2)), col="orange", lwd=3)
+      @
+    \end{frame}
+
+    \begin{frame}{Which model is best?}
+      We can use $R^2$ to compare models, as usual:
+
+      \begin{center}
+        \begin{tabular}{ll}
+          \hline
+          Model & $R^2$ \\
+          \hline
+          Trend only (additive) & \Sexpr{summary(trend.model)$r.squared} \\
+          Trend + Seasonal (additive) & \Sexpr{summary(seasonal.model)$r.squared} \\
+          Trend + Seasonal (multiplicative) & \Sexpr{summary(mult.model)$r.squared} \\
+          Trend + Seasonal + Tim Cook (multiplicative) & \Sexpr{summary(mult.model2)$r.squared} \\
+          \hline
+        \end{tabular}
+      \end{center}
+
+      \pause
+
+      Another approach is to use the average absolute prediction error (or average percent prediction error) when predicting revenue at time $t+1$ using only the data from time $1,2,\ldots, t$.
+    \end{frame}
+  \end{darkframes}
+\end{document}
