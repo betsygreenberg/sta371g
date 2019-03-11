@@ -42,7 +42,7 @@
       \begin{itemize}[<+->]
         \item \greencheckmark A \alert{trend} component: revenue is increasing over the long run.
         \item \greencheckmark A \alert{seasonal} component: revenue is higher in some quarters than others.
-        \item \redx No \alert{cyclic} component: things just seem to be going up over time.
+        \item \redx No \alert{cyclic} component: things just seem to be going up over time. (A cyclic pattern would consist of unpredictable short-term trends, like the value of the Dow Jones index over time.)
         \item \greencheckmark An \alert{irregular} component: there is definitely quarter-by-quarter variation that is not accounted for by the other components. (This is the part that can't be modeled!)
       \end{itemize}
     \end{frame}
@@ -203,6 +203,13 @@
       \pause
 
       Another approach is to use the average absolute prediction error (or average percent prediction error) when predicting revenue at time $t+1$ using only the data from time $1,2,\ldots, t$.
+    \end{frame}
+
+    \begin{frame}{What about modeling cyclic components?}
+      \begin{itemize}
+        \item When there is a \alert{cyclic} component (e.g., due to business cycles, like the ups and downs of the stock market), neither a trend nor seasonal model will be appropriate.
+        \item To model cyclic time series you can use \alert{autoregression}, where we predict what happens in time $t$ using what happens in time $t-1, t-2, \ldots$. (We won't cover this in 371!)
+      \end{itemize}
     \end{frame}
   \end{darkframes}
 \end{document}
