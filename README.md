@@ -18,8 +18,8 @@
 | Lecture 12: Model building: interactions 1 | [Slides](slides/lecture-12/lecture-12.pdf) | [R script](lecture-scripts/lecture-12.R) |
 | Lecture 13: Model building: interactions 2 | [Slides](slides/lecture-13/lecture-13.pdf) | [R script](lecture-scripts/lecture-13.R) |
 | Lecture 14: Model building: problems and fixing them | [Slides](slides/lecture-14/lecture-14.pdf) | [R script](lecture-scripts/lecture-14.R) |
-| Lecture 15: Model building: time and seasonality | [Slides](slides/lecture-15/lecture-15.pdf) |  |
-
+| Lecture 15: Model building: time and seasonality | [Slides](slides/lecture-15/lecture-15.pdf) | [R script](lecture-scripts/lecture-15.R) |
+| Lecture 16: Logistic regression 1 | [Slides](slides/lecture-16/lecture-16.pdf) | |
 
 # Review
 

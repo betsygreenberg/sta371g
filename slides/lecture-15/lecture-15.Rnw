@@ -85,7 +85,7 @@
       \]
       To extrapolate the model out into the future, we just have to figure out what the value of the Time variable is for the time period we want to  forecast. \pause For example, the last time period is Q4 2018, which is $\text{Time}=50$, so Q1 2019 is $\text{Time}=51$:
       \[
-        \widehat{\text{Q2 2019 revenue}} =
+        \widehat{\text{Q1 2019 revenue}} =
           \Sexpr{coefficients(trend.model)["(Intercept)"]} +
           \Sexpr{coefficients(trend.model)["Time"]} \cdot 51
       \]
