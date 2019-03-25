@@ -70,3 +70,11 @@ A single command will generate plots for you to check assumptions, as well as a 
 
 	# Define a model first, i.e. model <- lm(...)
 	plot(model)
+	
+If you need to calculate leverage specifically, you can do so with the `hatvalues` function:
+
+	hatvalues(model)
+	
+You can then sort the list if you need to figure out which cases have the highest leverage:
+	
+	sort(hatvalues(model))
