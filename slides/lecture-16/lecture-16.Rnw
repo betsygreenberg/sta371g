@@ -1,7 +1,7 @@
 \documentclass{beamer}
 \usepackage{preview}
 \usepackage{../371g-slides}
-\title{Logistic Regression 1}
+\title{Logistic regression 1}
 \subtitle{Lecture 16}
 \author{STA 371G}
 
@@ -223,87 +223,6 @@
 
       \bigskip\pause
       Increasing height by 2 inches will \emph{multiply} the odds by $e^{2 \cdot \Sexpr{b1}}=\Sexpr{exp(2*b1)}$; i.e., increase the odds by $\Sexpr{round(100*(exp(2*b1)-1), 0)}$\%.
-    \end{frame}
-
-    \begin{frame}{Testing the null hypothesis}
-      \begin{center}
-        As in regular linear regression, the overall null hypothesis is that $\beta_1=0$; we can test this by using the $p$-value for that variable on the output.
-
-        \bigskip\pause
-        Since $p$ is very small, we can reject the null hypothesis that $\beta_1=0$; i.e., there is a statistically significant relationship between height and sex.
-      \end{center}
-    \end{frame}
-
-    \begin{frame}{How good is our model?}
-      \begin{itemize}[<+->]
-        \item Unfortunately, the typical $R^2$ metric isn't available for logistic regression.
-        \item However, there are many ``pseudo-$R^2$'' metrics that indicate model fit.
-        \item But: most of these pseudo-$R^2$ metrics are difficult to interpret, so we'll focus on something simpler to interpret and communicate.
-      \end{itemize}
-    \end{frame}
-
-    \begin{frame}[fragile]{How many cases did we accurately predict?}
-      We could use our model to make a prediction of sex based on the probability. Suppose we say that our prediction is:
-      \[
-        \text{Prediction} = \begin{cases}
-          \text{male}, & \text{if $\widehat{P(\text{male})} \geq 0.5$}, \\
-          \text{female}, & \text{if $\widehat{P(\text{male})} < 0.5$}. \\
-        \end{cases}
-      \]
-
-      \pause
-      Now we can compute the fraction of people whose sex we correctly predicted:
-
-      \fontsize{9}{9}\selectfont
-      <<>>=
-      predicted.male <- (predict(model, type="response") >= 0.5)
-      actual.male <- (my.profiles$male == 1)
-      sum(predicted.male == actual.male) / nrow(my.profiles)
-      @
-    \end{frame}
-
-    \begin{frame}[fragile]{How many cases did we accurately predict?}
-      \Sexpr{round(100*(sum(predicted.male == actual.male) / nrow(my.profiles)), 0)}\% sounds pretty good---what should we compare it against?
-
-      \bigskip
-      \pause
-
-      We should compare \Sexpr{round(100*(sum(predicted.male == actual.male) / nrow(my.profiles)), 0)}\% against what we would have gotten if we just predicted the most common outcome (male) for everyone, without using any other information:
-      \pause
-
-      <<>>=
-      sum(actual.male) / nrow(my.profiles)
-      @
-
-      \pause
-
-      In other words, our model provided a ``lift'' in accuracy from \Sexpr{round(100*(sum(actual.male) / nrow(my.profiles)), 0)}\% to \Sexpr{round(100*(sum(predicted.male == actual.male) / nrow(my.profiles)), 0)}\%.
-    \end{frame}
-
-    \begin{frame}{The confusion matrix}
-      Sometimes it is useful to understand what kinds of errors our model is making:
-      \begin{itemize}
-        \item \alert{True positives}: predicting male for someone that is male
-        \item \alert{True negatives}: predicting female for someone that is female
-        \item \alert{False positives}: predicting male for someone that is female
-        \item \alert{False negatives}: predicting female for someone that is male
-      \end{itemize}
-      (If we had designated female as 1 and male as 0, these would have switched!)
-    \end{frame}
-
-    \begin{frame}[fragile]{The confusion matrix}
-      <<>>=
-      table(predicted.male, actual.male)
-      prop.table(table(predicted.male, actual.male), 2)
-      @
-    \end{frame}
-
-    \begin{frame}{What else can we use logistic regression for?}
-      \begin{itemize}
-        \item \textbf{Finance:} Predicting which customers are most likely to default on a loan
-        \item \textbf{Advertising:} Predicting when a customer will respond positively to an advertising campaign
-        \item \textbf{Marketing:} Predicting when a customer will purchase a product or sign up for a service
-      \end{itemize}
     \end{frame}
   \end{darkframes}
 
