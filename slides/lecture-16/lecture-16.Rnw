@@ -183,6 +183,15 @@
       We predict that someone that is 5'9" has a 77\% chance of being male.
     \end{frame}
 
+    \begin{frame}[fragile]{Visualizing the model}
+      <<echo=F>>=
+      plot(male ~ height, data=my.profiles[sample(nrow(my.profiles), 1000, replace=F),], pch=16, col="lightblue")
+      x <- seq(55, 80, 0.1)
+      y <- predict(model, list(height=x), type="response")
+      lines(x, y, lwd=3, col="orange")
+      @
+    \end{frame}
+
     \begin{frame}[fragile]{How to interpret the curve?}
       \[
         \widehat{P(\text{male})} = \frac{e^{\Sexpr{b0} + \Sexpr{b1}\cdot\text{height}}}{1 + e^{\Sexpr{b0} + \Sexpr{b1}\cdot\text{height}}}

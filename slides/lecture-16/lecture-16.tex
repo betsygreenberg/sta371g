@@ -245,13 +245,21 @@
       We predict that someone that is 5'9" has a 77\% chance of being male.
     \end{frame}
 
+    \begin{frame}[fragile]{Visualizing the model}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
+\input{/tmp/figures/unnamed-chunk-10-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
     \begin{frame}[fragile]{How to interpret the curve?}
       \[
         \widehat{P(\text{male})} = \frac{e^{-44.45 + 0.66\cdot\text{height}}}{1 + e^{-44.45 + 0.66\cdot\text{height}}}
       \]
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}
-\input{/tmp/figures/unnamed-chunk-10-1.tex}
+\input{/tmp/figures/unnamed-chunk-11-1.tex}
 
 \end{knitrout}
     \end{frame}
