@@ -20,7 +20,8 @@
 | Lecture 14: Model building: problems and fixing them | [Slides](slides/lecture-14/lecture-14.pdf) | [R script](lecture-scripts/lecture-14.R) |
 | Lecture 15: Model building: time and seasonality | [Slides](slides/lecture-15/lecture-15.pdf) | [R script](lecture-scripts/lecture-15.R) |
 | Lecture 16: Logistic regression 1 | [Slides](slides/lecture-16/lecture-16.pdf) | [R script](lecture-scripts/lecture-16.R) |
-| Lecture 17: Logistic regression 2 | [Slides](slides/lecture-17/lecture-17.pdf) | |
+| Lecture 17: Logistic regression 2 | [Slides](slides/lecture-17/lecture-17.pdf) | [R script](lecture-scripts/lecture-17.R) |
+| Lecture 18: Logistic regression 3 | [Slides](slides/lecture-18/lecture-18.pdf) |  |
 
 # Review
 
