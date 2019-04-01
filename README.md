@@ -36,7 +36,7 @@
 | February 19 |  | [Slides](help-session-slides/session-04.pdf) | [R script](help-session-scripts/session-04.R)|
 | February 24 |[Video](https://youtu.be/6gbnhO4-9Lw) || [R script](help-session-scripts/Midterm1Review.R)|
 | March 5 | [Video](https://www.youtube.com/watch?v=gx2cWVzVrjU&feature=youtu.be) || [R script](help-session-scripts/session-06.R)|
-| March 12| | | [R script](help-session-scripts/session-07.R) |
+| March 12| [Video](https://mccombs.mediasite.com/Mediasite/Play/789f199ecc7b4d1baee6d7eda98744b91d?catalog=0756227b8344470682161f76ee044b2621&playFrom=579&autoStart=true) | | [R script](help-session-scripts/session-07.R) |
 | April 2 | | [Slides](https://github.com/brianlukoff/sta371g/blob/master/help-session-slides/session-08.pdf) | |
 
 # PLUS
