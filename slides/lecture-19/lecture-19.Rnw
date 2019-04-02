@@ -1,0 +1,65 @@
+\documentclass{beamer}
+\usepackage{preview}
+\usepackage{../371g-slides}
+\title{Logistic regression lab}
+\subtitle{Lecture 19}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, tidy=F)
+  knit_theme$set('camo')
+
+  <<include=F, cache=F>>=
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}
+      \begin{center}
+        No Learning Catalytics questions yet....
+
+        \bigskip
+
+        \includegraphics[width=1.8in,keepaspectratio]{null_hypothesis}
+      \end{center}
+    \end{frame}
+
+    \begin{frame}{Case study: An application of logistic regression}
+      \begin{itemize}[<+->]
+        \item Imagine you are running a web site and you are considering whether to present an offer for a magazine subscription to users.
+        \item Presenting the offer when the customer is not interested will annoy them; not presenting the offer means you forgo a possible sale.
+        \item How do you decide which customers to present the offer to?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Building the data set}
+      \begin{itemize}[<+->]
+        \item The company recently concluded an email campaign where they offered the \emph{Creativity for Kids} magazine to the email list.
+        \item An email clickthrough tracked whether each customer subscribed to the magazine or not.
+        \item The company matched the data collected when the customer made a previous purchase with third-party data (which can be purchased from data sources such as the credit scoring agencies).
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{The activity}
+      Your goal is to build a logistic regression model to help the company make a prediction about whether to show the offer to a customer on the web site, based on characteristic of that customer:
+      \begin{itemize}
+        \item Demographics (income, gender, marital status, etc.)
+        \item Previous history with the company (previously purchased a parenting magazine; previously purchased a children's magazine)
+      \end{itemize}
+    \end{frame}
+  \end{darkframes}
+\end{document}
