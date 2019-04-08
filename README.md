@@ -36,10 +36,16 @@
 | February 5 | [Video](https://www.youtube.com/watch?v=7w38e3gE8zE) | | [R script](help-session-scripts/session-02.R)|
 | February 12 | [Video](https://youtu.be/up_Wqd_5pZw) | | [R script](help-session-scripts/session-03.R)|
 | February 19 |  | [Slides](help-session-slides/session-04.pdf) | [R script](help-session-scripts/session-04.R)|
-| February 24 |[Video](https://youtu.be/6gbnhO4-9Lw) || [R script](help-session-scripts/Midterm1Review.R)|
 | March 5 | [Video](https://www.youtube.com/watch?v=gx2cWVzVrjU&feature=youtu.be) || [R script](help-session-scripts/session-06.R)|
 | March 12| [Video](https://mccombs.mediasite.com/Mediasite/Play/789f199ecc7b4d1baee6d7eda98744b91d?catalog=0756227b8344470682161f76ee044b2621&playFrom=579&autoStart=true) | | [R script](help-session-scripts/session-07.R) |
 | April 2 | [Video](https://mccombs.mediasite.com/Mediasite/Play/a5f7ff2a3cd4471eb85f7ed923de969c1d?catalog=0756227b8344470682161f76ee044b2621) | [Slides](https://github.com/brianlukoff/sta371g/blob/master/help-session-slides/session-08.pdf) | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/session-08.R) |
+
+# Review Sessions
+
+| Date | Video | R script |
+| ------- | ----- | -------- |
+| February 24 | [Video](https://youtu.be/6gbnhO4-9Lw) | [R script](help-session-scripts/Midterm1Review.R) |
+| April 7 | [Video](https://mccombs.mediasite.com/Mediasite/Play/ae5666d7f74f4759b941c21a8c5b08ef1d?catalog=0756227b8344470682161f76ee044b2621) | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/Midterm2Review.R) |
 
 # PLUS
 
