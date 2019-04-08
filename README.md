@@ -44,7 +44,7 @@
 
 | Date | Video | R script |
 | ------- | ----- | -------- |
-| April 7 | [Video](https://mccombs.mediasite.com/Mediasite/Play/ae5666d7f74f4759b941c21a8c5b08ef1d?catalog=0756227b8344470682161f76ee044b2621) | [R script]()
+| April 7 | [Video](https://mccombs.mediasite.com/Mediasite/Play/ae5666d7f74f4759b941c21a8c5b08ef1d?catalog=0756227b8344470682161f76ee044b2621) | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/Midterm2Review.R)
 
 # PLUS
 
