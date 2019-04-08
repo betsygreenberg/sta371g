@@ -40,5 +40,11 @@
 | March 12| [Video](https://mccombs.mediasite.com/Mediasite/Play/789f199ecc7b4d1baee6d7eda98744b91d?catalog=0756227b8344470682161f76ee044b2621&playFrom=579&autoStart=true) | | [R script](help-session-scripts/session-07.R) |
 | April 2 | [Video](https://mccombs.mediasite.com/Mediasite/Play/a5f7ff2a3cd4471eb85f7ed923de969c1d?catalog=0756227b8344470682161f76ee044b2621) | [Slides](https://github.com/brianlukoff/sta371g/blob/master/help-session-slides/session-08.pdf) | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/session-08.R) |
 
+# Review Sessions
+
+| Date | Video | R script |
+| ------- | ----- | -------- |
+| April 7 | [Video]() | [R script]()
+
 # PLUS
 
