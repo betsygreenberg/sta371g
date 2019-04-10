@@ -23,6 +23,7 @@
 | Lecture 17: Logistic regression 2 | [Slides](slides/lecture-17/lecture-17.pdf) | [R script](lecture-scripts/lecture-17.R) |
 | Lecture 18: Logistic regression 3 | [Slides](slides/lecture-18/lecture-18.pdf) | [R script](lecture-scripts/lecture-18.R) |
 | Lecture 19: Logistic regression lab | [Slides](slides/lecture-19/lecture-19.pdf) | |
+| Lecture 20: Model evaluation: problems with p-values | [Slides](slides/lecture-20/lecture-20.pdf) | |
 
 # Review
 
