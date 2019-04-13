@@ -251,7 +251,7 @@
 
       \pause
 
-      This is somewhat lower than the $R^2$ from the original model (\Sexpr{round(old.r2, 2)}), but it's a fairer estimate of how good our model will perform on unseen data.
+      This is somewhat lower than the $R^2$ from the original model (\Sexpr{round(old.r2, 2)}), but it's a fairer estimate of how well our model will perform on unseen data.
     \end{frame}
 
     \begin{frame}{Be careful of getting too crazy!}
