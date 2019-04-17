@@ -1,0 +1,210 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+\title{Simulation 2}
+\subtitle{Lecture 23}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, tidy=F)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  set.seed(1)
+  options(width=53)
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}{Will you have enough money for retirement?}
+      \begin{itemize}[<+->]
+        \item Most people (try to) save for retirement throughout their career.
+        \item But how do you know that the money you have saved will last you from retirement age until death?
+        \item Particularly with expected lifespans growing, how do you know that you won't outlive your money?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Will you have enough money for retirement?}
+      \begin{itemize}[<+->]
+        \item Let's start by building a simple model of a portfolio.
+        \item Each year, at the beginning of the year, I put \$10,000 into a retirement account.
+        \item The entire account will be invested in a single asset that has normally distributed annual returns, with mean 12\% and SD 18\%.
+        \item What will the portfolio look like in 30 years?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      Let's start by writing R code for the first year:
+      <<>>=
+      # Start with nothing
+      account.value <- 0
+      # Add a $10,000 investment
+      account.value <- account.value + 10000
+      # Simulate this year's return
+      this.years.return <- rnorm(1, mean=.12, sd=.18)
+      # Apply the return
+      account.value <- account.value * (1 + this.years.return)
+      # Examine the account value
+      account.value
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Repeating a process within a run}
+      \fontsm
+      \begin{itemize}[<+->]
+        \item Within a single run of our simulation, we need to simulate 30 years of saving.
+        \item To do this, we can use a \texttt{for} loop, which lets us run a block of code repeatedly; for example, we can print out the first 5 square numbers:
+        <<>>=
+        for (n in 1:5) {
+          print(n^2)
+        }
+        @
+        The value of \verb|n| is set to a different value on each iteration of the code block \verb|{ ... }|.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      Returning to our portfolio simulation, let's repeat the process for 30 years:
+      \fontsm
+      <<>>=
+      account.value <- 0
+      for (year in 1:30) {
+        account.value <- account.value + 10000
+        this.years.return <- rnorm(1, mean=.12, sd=.18)
+        account.value <- account.value * (1 + this.years.return)
+      }
+      account.value
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsize{9}{9}\selectfont
+      <<fig.height=2.5>>=
+      portfolio.values <- replicate(10000, {
+        account.value <- 0
+        for (year in 1:30) {
+          account.value <- account.value + 10000
+          this.years.return <- rnorm(1, mean=.12, sd=.18)
+          account.value <- account.value * (1 + this.years.return)
+        }
+        return(account.value)
+      })
+      hist(portfolio.values, col="lightblue")
+      @
+      \lc
+    \end{frame}
+
+    \begin{frame}[fragile]
+      This looks pretty good at first, but there is a wide range of outcomes---let's look at the percentiles:
+      <<>>=
+      quantile(portfolio.values,
+        probs=c(0.05, 0.25, 0.5, 0.75, 0.95))
+      @
+      That's a ~10x spread between the 95th percentile outcome and the 5th percentile outcome!
+
+      \pause
+      \bigskip
+      The expected (average) value of my portfolio is:
+      <<>>=
+      mean(portfolio.values)
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{What if I only contribute \$5,000 per year?}
+      \fontsize{9}{9}\selectfont
+      <<>>=
+      portfolio.values <- replicate(10000, {
+        account.value <- 0
+        for (year in 1:30) {
+          account.value <- account.value + 5000
+          this.years.return <- rnorm(1, mean=.12, sd=.18)
+          account.value <- account.value * (1 + this.years.return)
+        }
+        return(account.value)
+      })
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      Let's look at the percentiles, under this new scenario where I only contribute \$5,000 per year:
+      <<>>=
+      quantile(portfolio.values,
+        probs=c(0.05, 0.25, 0.5, 0.75, 0.95))
+      @
+
+      \bigskip
+      The expected (average) value of my portfolio is:
+      <<>>=
+      mean(portfolio.values)
+      @
+
+      \pause\bigskip
+
+      Not contributing that extra \$5,000 per year is expected to cost me ~\$1.3M in the value of my retirement account!
+    \end{frame}
+
+    \begin{frame}[fragile]{How likely is it we'll retire a millionaire?}
+      \fontsize{9}{9}\selectfont
+      <<fig.height=2.5>>=
+      results <- replicate(10000, {
+        account.value <- 0
+        for (year in 1:30) {
+          account.value <- account.value + 10000
+          this.years.return <- rnorm(1, mean=.12, sd=.18)
+          account.value <- account.value * (1 + this.years.return)
+        }
+        return(account.value >= 1000000)
+      })
+      sum(results) / 10000
+      @
+    \end{frame}
+
+    \begin{frame}{How likely is it that I'll outlive my money?}
+      \begin{itemize}[<+->]
+        \item Suppose that after I turn 67 (i.e., year 30), I start withdrawing \$100,000 each year to live on, and I stop making annual contributions.
+        \item Let's consider a random 37-year old male, nonsmoker, moderately active, always wear seat belt, statistics fanatic, etc.---his life expectancy is \pause 88.
+        \item So let's simulate this process, and see how often my money outlives me.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontvsm
+      <<>>=
+      results <- replicate(10000, {
+        account.value <- 0
+        for (age in 37:66) {
+          account.value <- account.value + 10000
+          this.years.return <- rnorm(1, mean=.12, sd=.18)
+          account.value <- account.value * (1 + this.years.return)
+        }
+        for (age in 67:88) {
+          account.value <- account.value - 100000
+          if (account.value < 0) {
+            account.value <- 0
+          } else {
+            this.years.return <- rnorm(1, mean=.12, sd=.18)
+            account.value <- account.value * (1 + this.years.return)
+          }
+        }
+        return(account.value > 0)
+      })
+      sum(results) / 10000
+      @
+      \pause
+      There is a \Sexpr{round(100 * sum(results) / 10000, 2)}\% chance that I don't run out of money during retirement.
+    \end{frame}
+  \end{darkframes}
+\end{document}
