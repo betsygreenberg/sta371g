@@ -232,7 +232,7 @@
         \item A similar phenomenon occurs when you have many variables to choose from when building a regression model.
         \item By including many variables in your model, you can get $R^2$ to increase (or prediction error to decrease) on the data used to build the model.
         \item But the more complex models are more likely to be \alert{overfitting} the data, and won't generalize as well as simple models.
-        \item In general, a model's performance on the data used to build the model will usually not be as strong as its performance on new data.
+        \item In general, a model's performance on the data used to build the model will usually be stronger than its performance on new data.
         \item We can use the concept of training and test sets to address both $p$-hacking and overfitting.
       \end{itemize}
     \end{frame}
@@ -357,7 +357,7 @@
       \fontsm
       Let's build the model:
       <<>>=
-      model <- glm(Survived ~ Age, data=training.set)
+      model <- glm(Survived ~ Age, data=training.set, family=binomial)
       @
 
       \pause
