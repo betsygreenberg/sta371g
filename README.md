@@ -25,6 +25,7 @@
 | Lecture 19: Logistic regression lab | [Slides](slides/lecture-19/lecture-19.pdf) | |
 | Lecture 20: Model evaluation: problems with p-values | [Slides](slides/lecture-20/lecture-20.pdf) | |
 | Lecture 21: Model evaluation: training and test sets | [Slides](slides/lecture-21/lecture-21.pdf) | [R script](lecture-scripts/lecture-21.R) |
+| Lecture 22: Simulation 1 | [Slides](slides/lecture-22/lecture-22.pdf) | |
 
 # Review
 
