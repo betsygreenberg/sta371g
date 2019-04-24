@@ -29,6 +29,14 @@
   %%%%%%% Slides start here %%%%%%%
 
   \begin{darkframes}
+    \begin{frame}{Announcements}
+      \begin{itemize}
+        \item HW 8 (last one!) is posted and is due Tuesday, May 7.
+        \item Peer evaluations for Part 3 of the project are due this Friday.
+        \item Part 4 of the project is due this Friday.
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}{Will you have enough money for retirement?}
       \begin{itemize}[<+->]
         \item Most people (try to) save for retirement throughout their career.
