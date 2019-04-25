@@ -1,0 +1,219 @@
+\documentclass{beamer}
+\usepackage{../371g-slides}
+\title{Simulation 3}
+\subtitle{Lecture 24}
+\author{STA 371G}
+
+\begin{document}
+  <<setup, include=F, cache=F>>=
+  opts_knit$set(global.par=T)
+  knit_hooks$set(crop=hook_pdfcrop)
+  opts_chunk$set(dev='tikz', external=F, fig.path='/tmp/figures/', comment=NA, fig.width=4, fig.height=3, crop=T, sanitize=T, tidy=F)
+  knit_theme$set('camo')
+  @
+  <<include=F, cache=F>>=
+  par(fg='#fefefe', col.axis='#fefefe', col.lab='#fefefe', col.main="#fefefe", mar=c(5.1, 4.1, 1.1, 2.1))
+  set.seed(1)
+  options(width=53)
+  @
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}{Example 1: Simulating a betting game}
+      \begin{itemize}[<+->]
+        \item Suppose you are going to play blackjack, starting with \$100 in the ``bank.''
+        \item In each hand, you can bet as much as you want.
+        \item If you lose, you lose your bet.
+        \item If you win, you win what you bet.
+        \item Suppose there is a 40\% chance that you will win at any given hand.
+        \item What will your bank look like after 20 hands of blackjack?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \begin{itemize}[<+->]
+        \item Similar to \texttt{rnorm}, \texttt{runif} \underline{r}andomly samples from a \emph{\underline{unif}orm} distribution.
+        \item Without any parameters, it samples from the range $[0,1]$.
+        <<fig.height=2.5>>=
+        hist(runif(100000, min=4, max=7), col="pink", main="")
+        @
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{What is \texttt{runif} good for?}
+      \begin{itemize}[<+->]
+        \item \texttt{runif} is often useful for simulating an event that happens with a certain probability.
+        \item For example, \texttt{runif(1)} randomly selects one number uniformly from $[0,1]$, so it will be less than 0.2 about 20\% of the time.
+        \item To simulate an event that has a 20\% chance of happening:
+        <<results="hide">>=
+        if (runif(1) < 0.2) {
+          # The event happened.
+        } else {
+          # The event did not happen.
+        }
+        @
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsize{9}{9}\selectfont
+      <<fig.height=2>>=
+      results <- replicate(10000, {
+        bank <- 100
+        bet <- 1
+        for (hand in 1:20) {
+          if (runif(1) < 0.4) {
+            bank <- bank + bet
+          } else {
+            bank <- bank - bet
+          }
+        }
+        return(bank)
+      })
+      hist(results, col="pink", main="")
+      @
+    \end{frame}
+
+    \begin{frame}
+      \begin{itemize}
+        \item Let's model another betting strategy. Suppose that if we lose, we double our bet in an effort to recover the previous loss.
+        \item This way, if we lose, a win on the next hand would cancel out the losses.
+        \item This is called a \emph{Martingale betting strategy}.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsize{9}{9}\selectfont
+      <<fig.height=2>>=
+      results2 <- replicate(10000, {
+        bank <- 100
+        bet <- 1
+        for (hand in 1:20) {
+          win <- (runif(1) < 0.4)
+          if (win) {
+            bank <- bank + bet
+          } else {
+            bank <- bank - bet
+            bet <- 2 * bet
+          }
+        }
+        return(bank)
+      })
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]
+      <<include=F>>=
+      options(scipen=6, digits=2)
+      @
+      <<>>=
+      hist(results2, col="pink", main="")
+      @
+    \end{frame}
+
+    \begin{frame}[fragile]{Examining percentiles of outcomes}
+      \begin{itemize}[<+->]
+        \item In addition to looking at the mean or SD of the simulated results, we can also examine percentiles.
+        \item To look at the 5th, 50th (median), and 95th percentile result:
+        <<>>=
+        quantile(results2, probs=c(.05, .5, .95))
+        @
+        \item In other words: under the Martingale strategy, 5\% of the time our bank will end up less than $-\$\Sexpr{abs(quantile(results2, .05))}$, 50\% of the time we will end up with less than $\$\Sexpr{quantile(results2, .5)}$, etc.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Comparing the strategies}
+      \begin{center}
+        \begin{tabular}{l|ll}
+          Strategy & Original & Martingale \\
+          \hline
+          Expected total after 20 hands & \Sexpr{mean(results)} & \Sexpr{mean(results2)} \\
+          5th percentile after 20 hands & \Sexpr{quantile(results, .05)} & \Sexpr{quantile(results2, .05)} \\
+          95th percentile after 20 hands & \Sexpr{quantile(results, .95)} & \Sexpr{quantile(results2, .95)} \\
+        \end{tabular}
+
+        \pause\bigskip
+        You could do better with the Martingale strategy, but you'll probably end up doing \emph{much} worse!
+      \end{center}
+
+    \end{frame}
+
+    \begin{frame}{Example 2: Simulating pricing and demand}
+      \begin{itemize}[<+->]
+        \item Let's model the problem of oil drilling: you are planning to drill for oil in a newly-discovered field.
+        \item Setting up the drilling equipment costs \$1M.
+        \item There's a 45\% chance that you strike oil.
+        \item If you strike oil, you will generate money---\pause but how much depends on the price of oil and how much demand there is.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+      \begin{itemize}
+        \item Suppose that the price of oil is normally distributed, with a mean of \$45/barrel and an SD of \$8.
+        \item Suppose that the demand (the number of barrels we can sell) has a \emph{gamma distribution} with shape 3 and rate $1/40000$ (the gamma distribution can be used to model many processes, like waiting times and consumer demand, which must be $\geq 0$ and has a long right tail):
+        <<fig.height=2>>=
+        hist(rgamma(10000, shape=3, rate=1/40000),
+          col="orange", main="")
+        @
+      \end{itemize}
+
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+      <<fig.height=2>>=
+      results <- replicate(10000, {
+        if (runif(1) < 0.45) {
+          price <- rnorm(1, mean=45, sd=8)
+          demand <- rgamma(1, shape=3, rate=1/40000)
+          revenue <- price * demand - 1000000
+        } else {
+          revenue <- -1000000
+        }
+        return(revenue)
+      })
+      hist(results, col="lightblue", main="")
+      @
+    \end{frame}
+
+    \begin{frame}
+      \begin{itemize}[<+->]
+        \item We have been assuming that the amount of oil produced by the field is always sufficient to meet the demand.
+        \item It's more realistic to not assume this will necessarily be the case.
+        \item Suppose that production also has a gamma distribution with shape 3 and rate $1/40000$.
+        \item How much do we make if we decide to drill for oil?
+      \end{itemize}
+
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontvsm
+      <<fig.height=2>>=
+      results <- replicate(10000, {
+        if (runif(1) < 0.45) {
+          price <- rnorm(1, mean=45, sd=8)
+          demand <- rgamma(1, shape=3, rate=1/40000)
+          production <- rgamma(1, shape=3, rate=1/40000)
+          barrels.sold <- min(production, demand)
+          revenue <- price * barrels.sold - 1000000
+        } else {
+          revenue <- -1000000
+        }
+        return(revenue)
+      })
+      hist(results, col="lightblue", main="")
+      @
+    \end{frame}
+  \end{darkframes}
+\end{document}

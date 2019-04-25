@@ -1,0 +1,310 @@
+\documentclass{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{1, 0.894, 0.769}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.824,0.412,0.118}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{1,0.894,0.71}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.824,0.706,0.549}{#1}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{1,0.894,0.769}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{1,0.894,0.769}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.941,0.902,0.549}{#1}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.804,0.776,0.451}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.78,0.941,0.545}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{1,0.78,0.769}{#1}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{../371g-slides}
+\title{Simulation 3}
+\subtitle{Lecture 24}
+\author{STA 371G}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+  
+  
+
+  \frame{\maketitle}
+
+  % Show outline at beginning of each section
+  \AtBeginSection[]{
+    \begin{frame}<beamer>
+      \tableofcontents[currentsection]
+    \end{frame}
+  }
+
+  %%%%%%% Slides start here %%%%%%%
+
+  \begin{darkframes}
+    \begin{frame}{Example 1: Simulating a betting game}
+      \begin{itemize}[<+->]
+        \item Suppose you are going to play blackjack, starting with \$100 in the ``bank.''
+        \item In each hand, you can bet as much as you want.
+        \item If you lose, you lose your bet.
+        \item If you win, you win what you bet.
+        \item Suppose there is a 40\% chance that you will win at any given hand.
+        \item What will your bank look like after 20 hands of blackjack?
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \begin{itemize}[<+->]
+        \item Similar to \texttt{rnorm}, \texttt{runif} \underline{r}andomly samples from a \emph{\underline{unif}orm} distribution.
+        \item Without any parameters, it samples from the range $[0,1]$.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwd{hist}\hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{100000}\hlstd{,} \hlkwc{min}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{max}\hlstd{=}\hlnum{7}\hlstd{),} \hlkwc{col}\hlstd{=}\hlstr{"pink"}\hlstd{,} \hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-2-1.tex}
+
+\end{knitrout}
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{What is \texttt{runif} good for?}
+      \begin{itemize}[<+->]
+        \item \texttt{runif} is often useful for simulating an event that happens with a certain probability.
+        \item For example, \texttt{runif(1)} randomly selects one number uniformly from $[0,1]$, so it will be less than 0.2 about 20\% of the time.
+        \item To simulate an event that has a 20\% chance of happening:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwa{if} \hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{1}\hlstd{)} \hlopt{<} \hlnum{0.2}\hlstd{) \{}
+  \hlcom{# The event happened.}
+\hlstd{\}} \hlkwa{else} \hlstd{\{}
+  \hlcom{# The event did not happen.}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsize{9}{9}\selectfont
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{results} \hlkwb{<-} \hlkwd{replicate}\hlstd{(}\hlnum{10000}\hlstd{, \{}
+  \hlstd{bank} \hlkwb{<-} \hlnum{100}
+  \hlstd{bet} \hlkwb{<-} \hlnum{1}
+  \hlkwa{for} \hlstd{(hand} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{20}\hlstd{) \{}
+    \hlkwa{if} \hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{1}\hlstd{)} \hlopt{<} \hlnum{0.4}\hlstd{) \{}
+      \hlstd{bank} \hlkwb{<-} \hlstd{bank} \hlopt{+} \hlstd{bet}
+    \hlstd{\}} \hlkwa{else} \hlstd{\{}
+      \hlstd{bank} \hlkwb{<-} \hlstd{bank} \hlopt{-} \hlstd{bet}
+    \hlstd{\}}
+  \hlstd{\}}
+  \hlkwd{return}\hlstd{(bank)}
+\hlstd{\})}
+\hlkwd{hist}\hlstd{(results,} \hlkwc{col}\hlstd{=}\hlstr{"pink"}\hlstd{,} \hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-4-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}
+      \begin{itemize}
+        \item Let's model another betting strategy. Suppose that if we lose, we double our bet in an effort to recover the previous loss.
+        \item This way, if we lose, a win on the next hand would cancel out the losses.
+        \item This is called a \emph{Martingale betting strategy}.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsize{9}{9}\selectfont
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{results2} \hlkwb{<-} \hlkwd{replicate}\hlstd{(}\hlnum{10000}\hlstd{, \{}
+  \hlstd{bank} \hlkwb{<-} \hlnum{100}
+  \hlstd{bet} \hlkwb{<-} \hlnum{1}
+  \hlkwa{for} \hlstd{(hand} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{20}\hlstd{) \{}
+    \hlstd{win} \hlkwb{<-} \hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{1}\hlstd{)} \hlopt{<} \hlnum{0.4}\hlstd{)}
+    \hlkwa{if} \hlstd{(win) \{}
+      \hlstd{bank} \hlkwb{<-} \hlstd{bank} \hlopt{+} \hlstd{bet}
+    \hlstd{\}} \hlkwa{else} \hlstd{\{}
+      \hlstd{bank} \hlkwb{<-} \hlstd{bank} \hlopt{-} \hlstd{bet}
+      \hlstd{bet} \hlkwb{<-} \hlnum{2} \hlopt{*} \hlstd{bet}
+    \hlstd{\}}
+  \hlstd{\}}
+  \hlkwd{return}\hlstd{(bank)}
+\hlstd{\})}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwd{hist}\hlstd{(results2,} \hlkwc{col}\hlstd{=}\hlstr{"pink"}\hlstd{,} \hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-7-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}[fragile]{Examining percentiles of outcomes}
+      \begin{itemize}[<+->]
+        \item In addition to looking at the mean or SD of the simulated results, we can also examine percentiles.
+        \item To look at the 5th, 50th (median), and 95th percentile result:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwd{quantile}\hlstd{(results2,} \hlkwc{probs}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{.05}\hlstd{,} \hlnum{.5}\hlstd{,} \hlnum{.95}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+    5%    50%    95% 
+-31001    271  10409 
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+        \item In other words: under the Martingale strategy, 5\% of the time our bank will end up less than $-\$31001.1$, 50\% of the time we will end up with less than $\$271$, etc.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Comparing the strategies}
+      \begin{center}
+        \begin{tabular}{l|ll}
+          Strategy & Original & Martingale \\
+          \hline
+          Expected total after 20 hands & 95.96 & -4026.97 \\
+          5th percentile after 20 hands & 88 & -31001.1 \\
+          95th percentile after 20 hands & 104 & 10409.1 \\
+        \end{tabular}
+
+        \pause\bigskip
+        You could do better with the Martingale strategy, but you'll probably end up doing \emph{much} worse!
+      \end{center}
+
+    \end{frame}
+
+    \begin{frame}{Example 2: Simulating pricing and demand}
+      \begin{itemize}[<+->]
+        \item Let's model the problem of oil drilling: you are planning to drill for oil in a newly-discovered field.
+        \item Setting up the drilling equipment costs \$1M.
+        \item There's a 45\% chance that you strike oil.
+        \item If you strike oil, you will generate money---\pause but how much depends on the price of oil and how much demand there is.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+      \begin{itemize}
+        \item Suppose that the price of oil is normally distributed, with a mean of \$45/barrel and an SD of \$8.
+        \item Suppose that the demand (the number of barrels we can sell) has a \emph{gamma distribution} with shape 3 and rate $1/40000$ (the gamma distribution can be used to model many processes, like waiting times and consumer demand, which must be $\geq 0$ and has a long right tail):
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlkwd{hist}\hlstd{(}\hlkwd{rgamma}\hlstd{(}\hlnum{10000}\hlstd{,} \hlkwc{shape}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{rate}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{40000}\hlstd{),}
+  \hlkwc{col}\hlstd{=}\hlstr{"orange"}\hlstd{,} \hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-9-1.tex}
+
+\end{knitrout}
+      \end{itemize}
+
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontsm
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{results} \hlkwb{<-} \hlkwd{replicate}\hlstd{(}\hlnum{10000}\hlstd{, \{}
+  \hlkwa{if} \hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{1}\hlstd{)} \hlopt{<} \hlnum{0.45}\hlstd{) \{}
+    \hlstd{price} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{mean}\hlstd{=}\hlnum{45}\hlstd{,} \hlkwc{sd}\hlstd{=}\hlnum{8}\hlstd{)}
+    \hlstd{demand} \hlkwb{<-} \hlkwd{rgamma}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{shape}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{rate}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{40000}\hlstd{)}
+    \hlstd{revenue} \hlkwb{<-} \hlstd{price} \hlopt{*} \hlstd{demand} \hlopt{-} \hlnum{1000000}
+  \hlstd{\}} \hlkwa{else} \hlstd{\{}
+    \hlstd{revenue} \hlkwb{<-} \hlopt{-}\hlnum{1000000}
+  \hlstd{\}}
+  \hlkwd{return}\hlstd{(revenue)}
+\hlstd{\})}
+\hlkwd{hist}\hlstd{(results,} \hlkwc{col}\hlstd{=}\hlstr{"lightblue"}\hlstd{,} \hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-10-1.tex}
+
+\end{knitrout}
+    \end{frame}
+
+    \begin{frame}
+      \begin{itemize}[<+->]
+        \item We have been assuming that the amount of oil produced by the field is always sufficient to meet the demand.
+        \item It's more realistic to not assume this will necessarily be the case.
+        \item Suppose that production also has a gamma distribution with shape 3 and rate $1/40000$.
+        \item How much do we make if we decide to drill for oil?
+      \end{itemize}
+
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \fontvsm
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.137, 0.137, 0.137}\begin{kframe}
+\begin{alltt}
+\hlstd{results} \hlkwb{<-} \hlkwd{replicate}\hlstd{(}\hlnum{10000}\hlstd{, \{}
+  \hlkwa{if} \hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{1}\hlstd{)} \hlopt{<} \hlnum{0.45}\hlstd{) \{}
+    \hlstd{price} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{mean}\hlstd{=}\hlnum{45}\hlstd{,} \hlkwc{sd}\hlstd{=}\hlnum{8}\hlstd{)}
+    \hlstd{demand} \hlkwb{<-} \hlkwd{rgamma}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{shape}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{rate}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{40000}\hlstd{)}
+    \hlstd{production} \hlkwb{<-} \hlkwd{rgamma}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{shape}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{rate}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{40000}\hlstd{)}
+    \hlstd{barrels.sold} \hlkwb{<-} \hlkwd{min}\hlstd{(production, demand)}
+    \hlstd{revenue} \hlkwb{<-} \hlstd{price} \hlopt{*} \hlstd{barrels.sold} \hlopt{-} \hlnum{1000000}
+  \hlstd{\}} \hlkwa{else} \hlstd{\{}
+    \hlstd{revenue} \hlkwb{<-} \hlopt{-}\hlnum{1000000}
+  \hlstd{\}}
+  \hlkwd{return}\hlstd{(revenue)}
+\hlstd{\})}
+\hlkwd{hist}\hlstd{(results,} \hlkwc{col}\hlstd{=}\hlstr{"lightblue"}\hlstd{,} \hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\input{/tmp/figures/unnamed-chunk-11-1.tex}
+
+\end{knitrout}
+    \end{frame}
+  \end{darkframes}
+\end{document}
