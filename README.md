@@ -28,6 +28,8 @@
 | Lecture 22: Simulation 1 | [Slides](slides/lecture-22/lecture-22.pdf) | [R script](lecture-scripts/lecture-22.R) |
 | Lecture 23: Simulation 2 | [Slides](slides/lecture-23/lecture-23.pdf) | [R script](lecture-scripts/lecture-23.R) |
 | Lecture 24: Simulation 3 | [Slides](slides/lecture-24/lecture-24.pdf) | [R script](lecture-scripts/lecture-24.R) |
+| Lecture 25: Simulation lab |  | [R script](lecture-scripts/lecture-25.R) |
+
 
 
 # Review
