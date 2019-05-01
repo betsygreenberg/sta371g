@@ -49,7 +49,7 @@
 | April 2 | [Video](https://mccombs.mediasite.com/Mediasite/Play/a5f7ff2a3cd4471eb85f7ed923de969c1d?catalog=0756227b8344470682161f76ee044b2621) | [Slides](https://github.com/brianlukoff/sta371g/blob/master/help-session-slides/session-08.pdf) | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/session-07.R) |
 | April 16 | [Video](https://mccombs.mediasite.com/Mediasite/Play/c0baa124f1ed4ee7aa6d598153450b7d1d?catalog=0756227b8344470682161f76ee044b2621) | [Slides](https://github.com/brianlukoff/sta371g/blob/master/help-session-slides/4:16%20Help%20Session.pdf) | |
 | April 23 | [Video](https://mccombs.mediasite.com/Mediasite/Play/3f1e53b7154340d98dd789f21f16f0da1d?catalog=0756227b8344470682161f76ee044b2621) | | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/session-09.R) |
-| April 30 | [Video]() | | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/session-10.R) |
+| April 30 | [Video](https://mccombs.mediasite.com/Mediasite/Play/ba0fb7ba57144d98bb409b35399b233f1d?catalog=0756227b8344470682161f76ee044b2621) | | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/session-10.R) |
 
 # Review Sessions
 
