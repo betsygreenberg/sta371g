@@ -58,6 +58,3 @@
 | February 24 | [Video](https://youtu.be/6gbnhO4-9Lw) | [R script](help-session-scripts/Midterm1Review.R) |
 | April 7 | [Video](https://mccombs.mediasite.com/Mediasite/Play/ae5666d7f74f4759b941c21a8c5b08ef1d?catalog=0756227b8344470682161f76ee044b2621) | [R script](https://github.com/brianlukoff/sta371g/blob/master/help-session-scripts/Midterm2Review.R) |
 | May 5 | [Video](https://mccombs.mediasite.com/Mediasite/Play/e94aa4d44a95446cab001ca5300b36791d?catalog=0756227b8344470682161f76ee044b2621) | [R script](help-session-scripts/FinalReview.R) |
-
-# PLUS
-
