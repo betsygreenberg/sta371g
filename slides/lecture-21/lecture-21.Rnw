@@ -154,7 +154,7 @@
 
     \begin{frame}{Degree 1 polynomial}
       <<echo=F>>=
-      plot(x, y, pch=16, col="lightblue", xlab="", ylab="")
+      plot(x2, y2, pch=16, col="lightblue", xlab="", ylab="")
       y.hat <- predict(model1, list(x=x2))
       lines(x2, y.hat, col="orange", lwd=2)
       @
@@ -164,7 +164,7 @@
 
     \begin{frame}{Degree 2 polynomial}
       <<echo=F>>=
-      plot(x, y, pch=16, col="lightblue", xlab="", ylab="")
+      plot(x2, y2, pch=16, col="lightblue", xlab="", ylab="")
       y.hat <- predict(model2, list(x=x2))
       lines(x2, y.hat, col="orange", lwd=2)
       @
@@ -174,7 +174,7 @@
 
     \begin{frame}{Degree 3 polynomial}
       <<echo=F>>=
-      plot(x, y, pch=16, col="lightblue", xlab="", ylab="")
+      plot(x2, y2, pch=16, col="lightblue", xlab="", ylab="")
       y.hat <- predict(model3, list(x=x2))
       lines(x2, y.hat, col="orange", lwd=2)
       @
@@ -184,7 +184,7 @@
 
     \begin{frame}{Degree 10 polynomial}
       <<echo=F>>=
-      plot(x, y, pch=16, col="lightblue", xlab="", ylab="")
+      plot(x2, y2, pch=16, col="lightblue", xlab="", ylab="")
       y.hat <- predict(model10, list(x=x2))
       lines(x2, y.hat, col="orange", lwd=2)
       @
@@ -194,7 +194,7 @@
 
     \begin{frame}{Degree 20 polynomial}
       <<echo=F>>=
-      plot(x, y, pch=16, col="lightblue", xlab="", ylab="")
+      plot(x2, y2, pch=16, col="lightblue", xlab="", ylab="")
       lines(x, predict(model20), col="orange", lwd=2)
       @
       \vspace{-1cm} $\text{average absolute prediction error} = \Sexpr{round(mean(abs(y.hat - y2)), 4)}$
@@ -203,7 +203,7 @@
 
     \begin{frame}{Degree 30 polynomial}
       <<echo=F>>=
-      plot(x, y, pch=16, col="lightblue", xlab="", ylab="")
+      plot(x2, y2, pch=16, col="lightblue", xlab="", ylab="")
       lines(x, predict(model30), col="orange", lwd=2)
       @
       \vspace{-1cm} $\text{average absolute prediction error} = \Sexpr{round(mean(abs(y.hat - y2)), 4)}$
